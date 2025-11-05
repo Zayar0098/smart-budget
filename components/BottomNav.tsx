@@ -7,7 +7,7 @@ import { faHouse, faCalendarDays, faPiggyBank, faGear } from '@fortawesome/free-
 export function BottomNav() {
   return (
     <nav className="bottom-nav">
-      <Link href="/home"><FontAwesomeIcon icon={faHouse} />Home</Link>
+      <Link href="/"><FontAwesomeIcon icon={faHouse} />Home</Link>
       <Link href="/income">💼 Income</Link>
       <Link href="/month"><FontAwesomeIcon icon={faCalendarDays} />Calender</Link>
       <Link href="/saving-mode"><FontAwesomeIcon icon={faPiggyBank} />Saving</Link>
