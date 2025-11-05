@@ -1,0 +1,92 @@
+.dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #f6f7fb;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e8e8e8;
+  padding: 10px 20px;
+}
+
+.header .logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.currency select {
+  margin-left: 10px;
+}
+
+/* Summary */
+.summary {
+  display: flex;
+  justify-content: space-around;
+  background: #ddd;
+  margin: 15px 0;
+  padding: 10px;
+}
+
+.summary-item h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.summary-item p {
+  font-weight: bold;
+}
+
+/* Categories */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.category-card {
+  background: #ccc;
+  text-align: center;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+/* Add Button */
+.add-btn {
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin: 20px auto;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  background: #999;
+  color: white;
+  cursor: pointer;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #e0e0e0;
+  display: flex;
+}
+
+.bottom-nav button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  font-weight: bold;
+  cursor: pointer;
+}

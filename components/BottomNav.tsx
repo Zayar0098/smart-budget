@@ -1,14 +1,12 @@
-'use client'
-import Link from 'next/link'
+import Link from "next/link";
 
-export function BottomNav() {
+export default function BottomNav() {
   return (
     <nav className="bottom-nav">
-      <Link href="/">🏠 Home</Link>
-      <Link href="/income">💼 Income</Link>
-      <Link href="/month">📊 Month</Link>
-      <Link href="/saving-mode">💡 Saving</Link>
-      <Link href="/settings">⚙️ Settings</Link>
+      <Link href="/">Home</Link>
+      <Link href="/income">part-time income</Link>
+      <Link href="/month">Calendar</Link>
+      <Link href="/settings">Profile</Link>
     </nav>
-  )
+  );
 }

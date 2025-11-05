@@ -1,0 +1,8 @@
+{
+  "categories": [
+    { "id": "1", "name": "Food", "limit": 500, "spent": 200 },
+    { "id": "2", "name": "Transport", "limit": 300, "spent": 100 }
+  ],
+  "income": 2000,
+  "limit": 1500
+}
