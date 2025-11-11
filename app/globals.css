@@ -1,10 +1,76 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
   background: #fafafa;
 }
 
+a{
+  text-decoration: none;
+}
+
 .header, .bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.main-content {
+  padding: 16px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.category-card {
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 8px;
+  background: white;
+}
+
+.progress {
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 6px;
+}
+
+.bar {
+  background: #4caf50;
+  height: 100%;
+}
+
+:root {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.header,
+.bottom-nav {
   display: flex;
   justify-content: space-between;
   padding: 12px 16px;
