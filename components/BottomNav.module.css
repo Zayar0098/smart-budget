@@ -1,0 +1,56 @@
+/* BottomNav.module.css */
+
+/* ---------------------------------------------------- */
+/* 1. Main Container: Fixed and Sticky to Bottom */
+/* ---------------------------------------------------- */
+.navContainer {
+  /* Fixes the element to the viewport */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  /* Ensures it stays above all main content */
+  z-index: 1000; 
+  background-color: #ffffff; /* White background */
+  border-top: 1px solid #e5e7eb; /* Light separator line */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow on top */
+}
+
+/* ---------------------------------------------------- */
+/* 2. Navigation Layout (Flexbox for items) */
+/* ---------------------------------------------------- */
+.bottomNav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0; /* Vertical padding */
+  height: 60px; /* Standard mobile nav height */
+}
+
+/* ---------------------------------------------------- */
+/* 3. Link/Button Styling (Mobile Optimized) */
+/* ---------------------------------------------------- */
+.navLink {
+  display: flex;
+  flex-direction: column; /* Stack icon above text */
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Ensure equal spacing */
+  text-decoration: none;
+  color: #6b7280; /* Gray text color */
+  font-size: 11px; /* Small text for mobile */
+  font-weight: 600;
+  padding: 4px 0; /* Padding for a larger touch target */
+  transition: color 0.15s;
+}
+
+.navLink:hover {
+  color: #4f46e5; /* Highlight color on hover/tap */
+}
+
+/* Icon style */
+.navLink svg {
+  font-size: 18px;
+  margin-bottom: 2px;
+}

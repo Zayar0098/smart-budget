@@ -1,22 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+// CSSモジュールをインポート
+import styles from "./NumberPad.module.css"; 
 
 type Props = {
-  initial?: string; // 初期表示（数字文字列）
   visible: boolean;
+  initial?: string;
   onClose: () => void;
   onConfirm: (value: number) => void;
   maxDigits?: number;
 };
 
 export default function NumberPad({
-  initial = "",
   visible,
+  initial = "",
   onClose,
   onConfirm,
   maxDigits = 9,
 }: Props) {
+  // 初期値の先頭のゼロを削除するロジックは保持
   const [value, setValue] = useState<string>(initial.replace(/^0+/, ""));
 
   useEffect(() => {
@@ -27,111 +30,77 @@ export default function NumberPad({
 
   const push = (d: string) => {
     if (value.length >= maxDigits) return;
-    setValue((v) => (v === "0" ? d : v + d));
+    setValue((v) => (v === "" ? d : v + d)); // v === "0" の代わりに v === "" で処理を単純化
   };
-
-  const back = () => {
-    setValue((v) => (v.length <= 1 ? "" : v.slice(0, -1)));
-  };
-
+  const back = () => setValue((v) => (v.length <= 1 ? "" : v.slice(0, -1)));
   const clear = () => setValue("");
-
   const confirm = () => {
     const n = Number(value || 0);
     if (isNaN(n) || n < 0) return;
     onConfirm(Math.round(n));
     onClose();
   };
-
   const format = (v: string) =>
-    v === ""
-      ? "0"
-      : Number(v).toLocaleString("ja-JP", { maximumFractionDigits: 0 });
+    v === "" ? "0" : Number(v).toLocaleString("ja-JP");
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      style={{
-        position: "fixed",
-        inset: 0,
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
-        background: "rgba(0,0,0,0.35)",
-        zIndex: 9999,
-        padding: 16,
-      }}
       onClick={onClose}
+      className={styles.overlay} // スタイル適用
     >
       <div
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "#fff",
-          borderRadius: 12,
-          overflow: "hidden",
-        }}
         onClick={(e) => e.stopPropagation()}
+        className={styles.modalContent} // スタイル適用
       >
-        <div
-          style={{
-            padding: 12,
-            borderBottom: "1px solid #eee",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ fontSize: 14, color: "#555" }}>入力</div>
-          <div style={{ fontSize: 18, fontWeight: 600 }}>{format(value)}</div>
+        {/* ディスプレイ部分 */}
+        <div className={styles.displayRow}>
+          <div className={styles.displayLabel}>入力</div>
+          <div className={styles.displayValue}>{format(value)}</div>
         </div>
 
-        <div style={{ padding: 12 }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 8,
-            }}
-          >
+        {/* キーパッド部分 */}
+        <div className={styles.keypadGrid}>
+          <div className={styles.keypadGridInner}>
+            {/* 数字キー 1-9 */}
             {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
               <button
                 key={d}
                 onClick={() => push(d)}
-                style={{ padding: 14, fontSize: 18 }}
+                className={styles.keypadButton}
               >
                 {d}
               </button>
             ))}
-            <button onClick={clear} style={{ padding: 14, fontSize: 16 }}>
+            
+            {/* C (クリア) キー */}
+            <button onClick={clear} className={styles.keypadButton}>
               C
             </button>
-            <button
-              onClick={() => push("0")}
-              style={{ padding: 14, fontSize: 18 }}
-            >
+            
+            {/* 0 (ゼロ) キー */}
+            <button onClick={() => push("0")} className={styles.keypadButton}>
               0
             </button>
-            <button onClick={back} style={{ padding: 14, fontSize: 16 }}>
+            
+            {/* ⌫ (戻る) キー */}
+            <button onClick={back} className={styles.keypadButton}>
               ⌫
             </button>
           </div>
 
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <button onClick={onClose} style={{ flex: 1, padding: 12 }}>
+          {/* アクションボタン (キャンセル/確定) */}
+          <div className={styles.actionRow}>
+            <button 
+              onClick={onClose} 
+              className={styles.cancelButton}
+            >
               キャンセル
             </button>
             <button
               onClick={confirm}
-              style={{
-                flex: 1,
-                padding: 12,
-                background: "#4f46e5",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-              }}
+              className={styles.confirmButton}
             >
               確定
             </button>
