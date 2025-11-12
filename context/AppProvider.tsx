@@ -10,22 +10,17 @@ const initialState: AppState = {
   currency: "USD",
   savingMode: false,
   categories: [
-    { id: "rent", name: "Rent house", spent: 0 },
-    { id: "gas", name: "Gas bill", spent: 0 },
-    { id: "electric", name: "Electric bill", spent: 0 },
-    { id: "water", name: "Water bill", spent: 0 },
-    { id: "coffee", name: "Coffee", spent: 0 },
-    { id: "snack", name: "Snack", spent: 0 },
-    { id: "juice", name: "Juice", spent: 0 },
-    { id: "water2", name: "water", spent: 0 },
+    { id: "rent", name: "Rent house", spent: 0, locked: true },
+    { id: "gas", name: "Gas bill", spent: 0, locked: true },
+    { id: "electric", name: "Electric bill", spent: 0, locked: true },
+    { id: "water", name: "Water bill", spent: 0, locked: true },
   ],
 };
- 
-type DispatchType = React.Dispatch<Parameters<typeof appReducer>[1]>;
-type Ctx = { state: AppState; dispatch: DispatchType };
+
+type Ctx = { state: AppState; dispatch: React.Dispatch<any> };
 const AppContext = createContext<Ctx>({
   state: initialState,
-  dispatch: (() => null) as unknown as DispatchType,
+  dispatch: () => {},
 });
 
 export function AppProvider({ children }: { children: React.ReactNode }) {

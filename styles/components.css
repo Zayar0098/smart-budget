@@ -2,8 +2,9 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 16px;
-  /* extra space so content doesn't touch/underlap the bottom nav */
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  padding-bottom: calc(
+    140px + env(safe-area-inset-bottom)
+  ); /* more space for two FABs + nav */
 }
 
 .header {
@@ -79,6 +80,7 @@
 }
 
 .cat-card {
+  position: relative;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -92,103 +94,371 @@
 .cat-amount {
   font-weight: 600;
 }
+.cat-actions {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.btn.small {
+  font-size: 13px;
+  padding: 6px 10px;
+}
+.btn.xsmall {
+  font-size: 12px;
+  padding: 6px 8px;
+}
+.icon-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.icon-btn:hover {
+  color: #b91c1c;
+  background: #fdf2f2;
+}
 
 .fab {
   position: fixed;
   right: 24px;
   bottom: calc(64px + 24px + env(safe-area-inset-bottom));
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: #fff;
-  font-size: 24px;
-  line-height: 0;
+  font-size: 26px;
+  z-index: 60;
+}
+.fab-secondary {
+  position: fixed;
+  right: 88px;
+  bottom: calc(64px + 24px + env(safe-area-inset-bottom));
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 22px;
+  z-index: 60;
 }
 
+/* modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+}
+.modal {
+  width: min(440px, 92vw);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+.input,
+.select,
+.amount-input {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 16px;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.btn {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+}
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn.xsmall {
+  font-size: 12px;
+  padding: 6px 8px;
+}
+.hint {
+  color: #b91c1c;
+  font-size: 12px;
+  margin: 0;
+}
+
+.number-card {
+  text-align: left;
+}
+.amount-input {
+  font-size: 24px;
+  text-align: right;
+}
+
+/* FABs */
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: calc(64px + 24px + env(safe-area-inset-bottom));
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 26px;
+  z-index: 60;
+}
+.fab-secondary {
+  position: fixed;
+  right: 88px;
+  bottom: calc(64px + 24px + env(safe-area-inset-bottom));
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 22px;
+  z-index: 60;
+}
+
+/* bottom nav already improved */
 .bottom-nav {
-  position: fixed; /* stick to bottom */
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* changed to 5 items */
   height: 64px;
   align-items: stretch;
   background: #fff;
-  border-top: 1px solid var(--line); /* top border for the bar */
+  border-top: 1px solid var(--line);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
   z-index: 50;
 }
 
-.bottom-nav a {
+.bottom-nav a,
+.bottom-nav :where(a, button) {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 10px;
+  padding: 12px 8px;
   text-decoration: none;
   color: var(--fg);
-  border-right: 1px solid var(--line); /* separators between items */
+  border-right: 1px solid var(--line);
 }
 
-.bottom-nav a:last-child {
+.bottom-nav a:last-child,
+.bottom-nav :where(a, button):last-child {
   border-right: none;
 }
 
-/* keep FAB above the nav */
-.fab {
-  position: fixed;
-  right: 24px;
-  bottom: calc(64px + 24px + env(safe-area-inset-bottom));
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.card-actions {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+/* NumberPad component styles */
+.numpad-modal {
+  max-width: 360px;
+}
+.numpad-display {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: right;
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.numpad-btn {
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 500;
   border: 1px solid var(--line);
   background: #fff;
-  font-size: 24px;
-  line-height: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.numpad-btn:hover {
+  background: var(--card);
+}
+.numpad-btn.action {
+  background: var(--card);
+  font-size: 18px;
+}
+.numpad-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.numpad-actions .btn {
+  flex: 1;
 }
 
-.category-grid {
+/* small additions for income form */
+.app-income-form input,
+.app-income-form select,
+.app-income-form button {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* remove number input arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ensure amount input uses full width and plain numeric input style */
+.amount-input {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Append these styles to your existing components.css */
+
+.job-form {
+  border: 1px solid #e6e6e6;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+}
+.job-form .row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  align-items: center;
+}
+.job-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 200px;
+}
+
+.job-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.job-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+.job-card-title {
+  font-weight: 600;
+}
+.job-card-total {
+  margin-top: auto;
+  font-weight: 700;
 }
 
-.category-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
 }
-
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.modal {
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 320px;
+  max-width: 560px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
-
-.category-card h3 {
-  font-size: 1.1rem;
-  color: #2b2b2b;
+.modal label {
+  display: block;
   margin-bottom: 8px;
 }
-
-.category-card p {
-  margin: 4px 0;
-  font-size: 0.9rem;
+.modal .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.modal .preview {
+  margin: 8px 0;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
 }
 
-.progress {
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  height: 8px;
-  margin-top: 10px;
-  overflow: hidden;
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: #fff;
+}
+.history-table th,
+.history-table td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: left;
+}
+.history-table th {
+  background: #fafafa;
 }
 
-.progress-bar {
-  height: 100%;
-  background-color: #4f46e5;
-  transition: width 0.3s ease;
+button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+button.primary {
+  background: #0366d6;
+  color: #fff;
+  border-color: #0366d6;
+}
+button.muted {
+  background: #f4f4f4;
 }
