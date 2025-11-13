@@ -198,6 +198,20 @@ export function deleteSession(jobId: string, sessionId: string): boolean {
   return true;
 }
 
+// delete a job by id
+export function deleteJob(jobId: string): boolean {
+  try {
+    const jobs = loadJobs();
+    const exists = jobs.some((j) => j.id === jobId);
+    if (!exists) return false;
+    const next = jobs.filter((j) => j.id !== jobId);
+    saveJobs(next);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // recalc totals for all jobs (safe)
 export function recalcAllTotals() {
   const jobs = loadJobs();

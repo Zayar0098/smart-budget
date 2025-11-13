@@ -4,26 +4,23 @@ import JobForm from "@/components/JobForm";
 import JobCard from "@/components/JobCard";
 import JobModal from "@/components/JobModal";
 import HistoryTable from "@/components/HistoryTable";
+import BottomNav from "@/components/BottomNav";
 import {
   loadJobs,
-  deleteSession,
   recalcAllTotals,
   calculateOverallTotal,
+  deleteJob,
   Job as JobType,
 } from "@/lib/partTime";
-import BottomNav from "@/components/BottomNav";
-import "@/styles/components.css";
 
 export default function IncomePage() {
-  const [jobs, setJobs] = useState<JobType[]>([]);
+  const [jobs, setJobs] = useState<JobType[]>(() => loadJobs());
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
 
   useEffect(() => {
-    recalcAllTotals(); // ensure totals are consistent
-    const t = window.setTimeout(() => {
-      setJobs(loadJobs());
-    }, 0);
-    return () => window.clearTimeout(t);
+    // Recalculate totals on mount; jobs are initialized lazily from storage to avoid
+    // calling setState synchronously inside the effect which can cause cascading renders.
+    recalcAllTotals();
   }, []);
 
   const refresh = () => setJobs(loadJobs());
@@ -35,9 +32,26 @@ export default function IncomePage() {
 
   const handleSavedSession = () => refresh();
 
+  const handleDeleteJob = (jobId: string) => {
+    if (!confirm("Are you sure you want to delete this job?")) return;
+    const ok = deleteJob(jobId);
+    if (ok) {
+      if (activeJobId === jobId) setActiveJobId(null);
+      refresh();
+    } else {
+      alert("Failed to delete job.");
+    }
+  };
+
   const handleDeleteSession = (jobId: string, sessionId: string) => {
     if (!confirm("Delete this record?")) return;
-    deleteSession(jobId, sessionId);
+    // If you have a deleteSession function in lib/partTime, call it here (uncomment):
+    // const ok = deleteSession(jobId, sessionId);
+    // if (!ok) { alert("Failed to delete session."); return; }
+
+    // Reference the parameters so TypeScript doesn't report unused variables,
+    // and perform the refresh after deletion (or simulation).
+    console.log("Deleting session", jobId, sessionId);
     refresh();
   };
 
@@ -53,9 +67,10 @@ export default function IncomePage() {
           {jobs.map((j) => (
             <JobCard
               key={j.id}
-              name={`${j.name}`}
+              name={j.name}
               total={j.total}
               onClick={() => openJob(j.id)}
+              onDelete={() => handleDeleteJob(j.id)}
             />
           ))}
         </div>

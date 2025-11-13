@@ -462,3 +462,20 @@ button.primary {
 button.muted {
   background: #f4f4f4;
 }
+
+/* delete button on job cards */
+.job-card .delete-btn {
+  background: #fff;
+  color: #b91c1c; /* red text */
+  border: 1px solid #f87171;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+}
+.job-card .delete-btn:hover {
+  background: #fee2e2; /* light red background */
+  color: #7f1d1d;
+  transform: translateY(-1px);
+}
