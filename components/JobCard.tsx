@@ -2,6 +2,13 @@ import { useCurrency } from "../components/CurrencyProvider";
 import styles from "../app/pincome/page.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+interface Props {
+  name: string;
+  total: number;
+  onClick?: import("react").MouseEventHandler<HTMLDivElement>;
+  onDelete?: () => void;
+}
+
 export default function JobCard({ name, total, onClick, onDelete }: Props) {
   const { formatFromJPY } = useCurrency();
 
