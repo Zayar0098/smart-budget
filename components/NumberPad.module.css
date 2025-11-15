@@ -1,0 +1,102 @@
+/* NumberPad.module.css - Optimized for Mobile */
+
+/* ---------------------------------------------------- */
+/* 1. Overlay and Modal Positioning */
+/* ---------------------------------------------------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end; 
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  padding: 0;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+  margin: 0; 
+}
+
+/* ---------------------------------------------------- */
+/* 2. Display and Keypad Layout */
+/* ---------------------------------------------------- */
+.displayRow {
+  padding: 10px 12px; /* Reduced vertical padding */
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.displayLabel {
+  font-size: 13px; /* Slightly smaller font */
+  color: #555;
+}
+.displayValue {
+  font-size: 22px; /* Reduced font size for display value */
+  font-weight: 600;
+}
+
+.keypadGrid {
+  padding: 10px; /* Reduced padding around the grid */
+}
+
+.keypadGridInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px; /* Reduced key gap */
+}
+
+/* ---------------------------------------------------- */
+/* 3. Button Styles (Keypad and Actions) */
+/* ---------------------------------------------------- */
+.keypadButton {
+  /* Key Optimization for better touch targets */
+  padding: 16px 14px; /* Reduced vertical padding for smaller button height */
+  font-size: 20px; /* Reduced font size */
+  font-weight: 500;
+  border: 1px solid #eee;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+.keypadButton:active {
+  background-color: #ddd;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px; /* Reduced gap */
+  margin-top: 10px; /* Reduced margin */
+}
+
+.actionButton {
+  flex: 1;
+  padding: 12px; /* Reduced button padding */
+  border-radius: 8px; /* Slightly rounded corners */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px; /* Smaller font for action buttons */
+}
+
+.cancelButton {
+  composes: actionButton;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.confirmButton {
+  composes: actionButton;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+}

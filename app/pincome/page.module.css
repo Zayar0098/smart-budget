@@ -1,0 +1,167 @@
+
+.jobgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.jobcard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+.jobcardtitle {
+  font-weight: 600;
+}
+.jobcardtotal {
+  margin-top: auto;
+  font-weight: 700;
+}
+
+.modaloverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+.modal {
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 320px;
+  max-width: 560px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+.modal label {
+  display: block;
+  margin-bottom: 8px;
+}
+.modal .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.modal .preview {
+  margin: 8px 0;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.historytable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+.historytable th,
+.historytable td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: left;
+}
+.historytable th {
+  background: #fafafa;
+}
+
+/* delete button on job cards */
+.jobcard .deletebtn {
+  background: #fff;
+  color: #b91c1c; /* red text */
+  border: 1px solid #f87171;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+}
+.jobcard .deletebtn:hover {
+  background: #fee2e2; /* light red background */
+  color: #7f1d1d;
+  transform: translateY(-1px);
+}
+
+.jobformContainer {
+  margin-bottom: 12px;
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.formRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 160px;
+}
+
+.formField span {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.formField input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.buttonGroup button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: #0070f3;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.buttonGroup button.muted {
+  background: #ddd;
+  color: #333;
+}
+
+.buttonGroup button:hover {
+  opacity: 0.9;
+}
+
+/* --- 📱 Mobile responsiveness --- */
+@media (max-width: 600px) {
+  .formRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttonGroup {
+    justify-content: flex-start;
+  }
+
+  .buttonGroup button {
+    width: 100%;
+  }
+}

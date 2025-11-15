@@ -47,3 +47,18 @@ body {
   background: #4caf50;
   height: 100%;
 }
+button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+button.primary {
+  background: #0366d6;
+  color: #fff;
+  border-color: #0366d6;
+}
+button.muted {
+  background: #f4f4f4;
+}

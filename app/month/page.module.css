@@ -1,0 +1,66 @@
+.container {
+  padding: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.monthHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.arrowBtn {
+  border: none;
+  background: #eee;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.monthTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 50px;
+}
+
+.dayBox {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px;
+  min-height: 50px;
+  min-width: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.dayNumber {
+  font-weight: bold;
+  font-size: 10px;
+  color: #333;
+}
+
+.spentAmount {
+  font-size: 10px;
+  color: #666;
+  min-height: 1.2em;
+}
+
+.footerNote {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #999;
+}
