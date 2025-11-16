@@ -3,7 +3,7 @@
 import { useState } from "react";
 import NumberPad from "@/components/NumberPad";
 // 既存のuseSharedAppStateを新しいものに置き換える
-import useSharedAppState from "@/hooks/useSharedAppState"; 
+import useSharedAppState from "../../hooks/useSharedAppState"; 
 
 export default function Page() {
     // データの読み込みと更新をカスタムフックに一元化
@@ -19,8 +19,10 @@ export default function Page() {
     
     // ... (既存の totalSpent, computedBalance, balance の計算ロジックはそのまま) ...
 
-    const totalSpent = categories.reduce(
-        (s: number, c: any) => s + (c.spent || 0),
+    type Category = { spent?: number };
+    const typedCategories: Category[] = categories as Category[];
+    const totalSpent = typedCategories.reduce(
+        (s: number, c: Category) => s + (c.spent || 0),
         0
     );
     const computedBalance = income - totalSpent;
@@ -66,7 +68,7 @@ export default function Page() {
 
     return (
         <div style={{ padding: 20 }}>
-            <h1>Income</h1>
+            <h1>Settings</h1>
 
             <div style={{ display: "grid", gap: 12, maxWidth: 720 }}>
                 {/* Income Card */}

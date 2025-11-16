@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import useClientStoredState from "./useClientStoredState";
 import 'flag-icons/css/flag-icons.min.css';
 
@@ -93,59 +93,58 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
   }, [selected, API_KEY]);
 
   // --- Conversion and Formatting Logic ---
-  const convertFromJPY = (jpy: number) => {
-    const code = selected ?? "JPY";
-    const rate = rates[code] ?? 1;
-    return (jpy || 0) * rate;
-  };
-
-  const formatFromJPY = (jpy: number) => {
-    const code = selected ?? "JPY";
-    const value = convertFromJPY(jpy);
-    
-    // Ensure formatting works even if the browser doesn't recognize the currency
-    try {
-      return new Intl.NumberFormat(undefined, {
-        style: "currency",
-        currency: code,
-        maximumFractionDigits: code === "JPY" ? 0 : 2,
-      }).format(value);
-    } catch {
-      // Fallback format if Intl.NumberFormat fails for the currency code
-      const flag = currencyFlags[code] || '';
-      return `${flag} ${value.toFixed(2)} ${code}`;
-    }
-  };
-
-  // --- Context Value ---
-  const value = useMemo(
-    () => ({
-      selected: selected ?? "JPY",
-      setSelected: (c: string) => setSelected(c),
-      formatFromJPY,
-      convertFromJPY,
-      loading,
-      error,
-      rates,
-    }),
-    [selected, loading, error, rates] // Dependencies for useMemo
-  );
+    const convertFromJPY = useCallback((jpy: number) => {
+      const code = selected ?? "JPY";
+      const rate = rates[code] ?? 1;
+      return (jpy || 0) * rate;
+    }, [selected, rates]);
+  
+    const formatFromJPY = useCallback((jpy: number) => {
+      const code = selected ?? "JPY";
+      const value = convertFromJPY(jpy);
+      
+      // Ensure formatting works even if the browser doesn't recognize the currency
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency: code,
+          maximumFractionDigits: code === "JPY" ? 0 : 2,
+        }).format(value);
+      } catch {
+        // Fallback format if Intl.NumberFormat fails for the currency code
+        const flag = currencyFlags[code] || '';
+        return `${flag} ${value.toFixed(2)} ${code}`;
+      }
+    }, [selected, convertFromJPY]);
+  
+    // --- Context Value ---
+    const value = useMemo(
+      () => ({
+        selected: selected ?? "JPY",
+        setSelected: (c: string) => setSelected(c),
+        formatFromJPY,
+        convertFromJPY,
+        loading,
+        error,
+        rates,
+      }),
+      [selected, loading, error, rates, formatFromJPY, convertFromJPY, setSelected] // Dependencies for useMemo
+    );
   
   // Get the display string for the currently selected currency in the header
-  const selectedCurrencyDisplay = `${currencyFlags[selected ?? 'JPY'] || ''} ${selected ?? 'JPY'}`;
+  // const selectedCurrencyDisplay = `${currencyFlags[selected ?? 'JPY'] || ''} ${selected ?? 'JPY'}`;
 
   const [open, setOpen] = useState(false);
 
   return (
     <CurrencyContext.Provider value={value}>
-      {/* ヘッダー：ドロップダウンと通貨表示 */}
       <div style={{ borderBottom: "1px solid #eee" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 12 }}>
           <div style={{ fontWeight: 700 }}>Smart Budget</div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
   <div style={{ fontSize: 12, color: "#666" }}>
-    {loading ? "レート取得中…" : error ? "レートエラー" : "表示通貨"}
+    {loading ? "Loading" : error ? "レートエラー" : "Currency"}
   </div>
 <div style={{ position: "relative" }}>
   <button
@@ -186,9 +185,7 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
     </ul>
   )}
 </div>
-
 </div>
-
         </div>
       </div>
 

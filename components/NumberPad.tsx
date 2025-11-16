@@ -23,7 +23,17 @@ export default function NumberPad({
   const [value, setValue] = useState<string>(initial.replace(/^0+/, ""));
 
   useEffect(() => {
-    setValue(initial.replace(/^0+/, ""));
+    let t: number | null = null;
+    if (visible) {
+      t = window.setTimeout(() => {
+        setValue(initial.replace(/^0+/, ""));
+      }, 0);
+    }
+    return () => {
+      if (t !== null) {
+        clearTimeout(t);
+      }
+    };
   }, [initial, visible]);
 
   if (!visible) return null;
@@ -56,7 +66,7 @@ export default function NumberPad({
       >
         {/* ディスプレイ部分 */}
         <div className={styles.displayRow}>
-          <div className={styles.displayLabel}>入力</div>
+          <div className={styles.displayLabel}>Input</div>
           <div className={styles.displayValue}>{format(value)}</div>
         </div>
 
@@ -96,13 +106,13 @@ export default function NumberPad({
               onClick={onClose} 
               className={styles.cancelButton}
             >
-              キャンセル
+              Cancel
             </button>
             <button
               onClick={confirm}
               className={styles.confirmButton}
             >
-              確定
+              Submit
             </button>
           </div>
         </div>

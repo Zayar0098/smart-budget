@@ -10,7 +10,7 @@ type Props = {
   onDelete?: (jobId: string, sessionId: string) => void;
 };
 
-export default function HistoryTable({ jobs, onDelete }: Props) {
+export default function HistoryTable({ jobs }: Props) {
   const rows: Row[] = [];
   const { formatFromJPY } = useCurrency();
   for (const job of jobs) {
@@ -25,10 +25,10 @@ export default function HistoryTable({ jobs, onDelete }: Props) {
     <table className={styles.historytable}>
       <thead>
         <tr>
-          <th>Job</th>
+          <th>Name</th>
           <th>Date</th>
-          <th>Work</th>
-          <th>Rest</th>
+          <th>Time</th>
+          <th>Break</th>
           <th>Total</th>
         </tr>
       </thead>

@@ -27,11 +27,10 @@ export default function JobForm({ onSaved }: Props) {
 
   return (
     <div className={styles.jobformContainer}>
-      <h3>Register job</h3>
-
+      <h3 style={{marginBottom : "10px"}}>Register part time</h3>
       <div className={styles.formRow}>
         <label className={styles.formField}>
-          <span>Job name</span>
+          <span>Name</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -50,15 +49,6 @@ export default function JobForm({ onSaved }: Props) {
 
         <div className={styles.buttonGroup}>
           <button onClick={save}>Save</button>
-          <button
-            onClick={() => {
-              setName("");
-              setWage("");
-            }}
-            className="muted"
-          >
-            Reset
-          </button>
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ export default function BottomNav() {
 
         <Link href="/pincome" className={styles.navLink}>
           <FontAwesomeIcon icon={faClock} />
-          Clock
+          P-Time
         </Link>
         
         {/* 2. Calendar */}

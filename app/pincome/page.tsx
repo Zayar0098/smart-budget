@@ -15,6 +15,8 @@ import styles from "./page.module.css";
 import HistoryTable from "@/components/HistoryTable";
 
 export default function IncomePage() {
+  const [jobFormOpen, setJobFormOpen] = useState(false);
+
   const [jobs, setJobs] = useState<JobType[]>(() => loadJobs());
     const [activeJobId, setActiveJobId] = useState<string | null>(null);
     const { formatFromJPY } = useCurrency();
@@ -42,14 +44,34 @@ export default function IncomePage() {
     }
   };
 
-  return (
+  return (<>
+    <button
+  className={styles.addButton}
+  onClick={() => setJobFormOpen(true)}
+>
+  ＋
+</button>
     <main style={{ padding: 16, maxWidth: 1000, margin: "0 auto" }}>
-      <h1>Part-time income tracker</h1>
-
-      <JobForm onSaved={onJobSaved} />
-
-      <section style={{ marginTop: 18 }}>
-        <h2>Jobs</h2>
+      <section>
+        <div style={{ display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+          <h2>Part Time</h2>
+          <p>Overall:<strong>{formatFromJPY(calculateOverallTotal())}</strong></p>
+        </div>
+        {jobFormOpen && (
+      <div className={styles.modalOverlay} onClick={() => setJobFormOpen(false)}>
+        <div
+          className={styles.modalContent}
+          onClick={(e) => e.stopPropagation()}
+          >
+      <JobForm
+        onSaved={() => {
+          onJobSaved();
+          setJobFormOpen(false);
+        }}
+      />
+    </div>
+  </div>
+)}
         <div className={styles.jobgrid}>
           {jobs.map((j) => (
             <JobCard
@@ -65,10 +87,7 @@ export default function IncomePage() {
 
       <section style={{ marginTop: 18 }}>
         <h2>History</h2>
-            <HistoryTable jobs={jobs} />
-                <div style={{ marginTop: 8, fontWeight: 600 , marginBottom: "60px"}}>
-            Overall: {formatFromJPY(calculateOverallTotal())}
-        </div>
+          <HistoryTable jobs={jobs} />
       </section>
 
       {activeJobId && (
@@ -80,5 +99,6 @@ export default function IncomePage() {
         />
       )}
     </main>
+    </>
   );
 }

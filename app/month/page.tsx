@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCurrency } from "../../components/CurrencyProvider";
 import styles from "./page.module.css";
 
@@ -12,25 +12,93 @@ export default function CalendarPage() {
   const month = currentDate.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  useEffect(() => {
-    const categories = JSON.parse(localStorage.getItem("sb_categories") || "[]");
-    const totals: Record<string, number> = {};
+useEffect(() => {
+  const loadDailyTotals = () => {
+    try {
+      const raw = localStorage.getItem("sb_categories");
+      if (!raw) {
+        setDailyTotals({});
+        return;
+      }
+      let categories: string;
+      try {
+        categories = JSON.parse(raw);
+      } catch (err) {
+        console.error("sb_categories JSON.parse failed:", err, "raw:", raw);
+        setDailyTotals({});
+        return;
+      }
 
-    categories.forEach((cat: any) => {
-      (cat.history || []).forEach((h: any) => {
-        const date = new Date(h.timestamp);
-        if (date.getFullYear() === year && date.getMonth() === month) {
+      if (!Array.isArray(categories)) {
+        console.error("sb_categories is not an array:", categories);
+        setDailyTotals({});
+        return;
+      }
+
+      const totals: Record<string, number> = {};
+
+      categories.forEach((cat: any, catIndex: number) => {
+        const history = Array.isArray(cat?.history) ? cat.history : [];
+        history.forEach((h: any, histIndex: number) => {
+          // Basic validation
+          if (!h) {
+            console.warn(`Skipping empty history item (cat ${catIndex} hist ${histIndex})`);
+            return;
+          }
+
+          // Parse timestamp -> date
+          const date = new Date(h.timestamp);
+          if (Number.isNaN(date.getTime())) {
+            console.warn(
+              `Skipping invalid timestamp (cat ${catIndex} hist ${histIndex}):`,
+              h.timestamp
+            );
+            return;
+          }
+
+          if (date.getFullYear() !== year || date.getMonth() !== month) {
+            // not in current month/year
+            return;
+          }
+
           const key = date.toISOString().slice(0, 10);
-          totals[key] = (totals[key] || 0) + h.amount;
-        }
+
+          // Ensure amount is a number
+          let amountNum = h.amount;
+          if (typeof amountNum === "string") {
+            // Remove commas and whitespace then try parse
+            const cleaned = amountNum.replace(/[,\s]/g, "");
+            amountNum = cleaned === "" ? 0 : Number(cleaned);
+          }
+
+          if (typeof amountNum !== "number" || Number.isNaN(amountNum)) {
+            console.warn(
+              `Skipping invalid amount (cat ${catIndex} hist ${histIndex}):`,
+              h.amount
+            );
+            return;
+          }
+
+          totals[key] = (totals[key] || 0) + amountNum;
+        });
       });
-    });
 
-    setDailyTotals(totals);
-  }, [year, month]);
+      setDailyTotals(totals);
+    } catch (err) {
+      console.error("Unexpected error while loading daily totals:", err);
+      setDailyTotals({});
+    }
+  };
 
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+  loadDailyTotals();
+}, [year, month]);
+
+const prevMonth = () =>
+  setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
+
+const nextMonth = () =>
+  setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+
 
   return (
     <div className={styles.container}>
@@ -39,7 +107,7 @@ export default function CalendarPage() {
           &lt;
         </button>
         <h2 className={styles.monthTitle}>
-          {year}年 {month + 1}月
+          {year}/{month + 1}
         </h2>
         <button onClick={nextMonth} className={styles.arrowBtn}>
           &gt;
@@ -66,7 +134,7 @@ export default function CalendarPage() {
       </div>
 
       <div className={styles.footerNote}>
-        ※ 通貨: {selected}
+        ※ Currency: {selected}
       </div>
     </div>
   );

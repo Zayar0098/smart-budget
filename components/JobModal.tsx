@@ -14,8 +14,8 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
   const [date, setDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   ); // YYYY-MM-DD
-  const [start, setStart] = useState("18:00");
-  const [end, setEnd] = useState("22:00");
+  const [start, setStart] = useState("16:00");
+  const [end, setEnd] = useState("23:00");
   const [restStart, setRestStart] = useState("");
   const [restEnd, setRestEnd] = useState("");
 
@@ -37,8 +37,7 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
     <div className={styles.modaloverlay} onClick={onClose}>
       <div className={styles.modal} style={{ maxWidth: 400, width: "90%" }} onClick={(e) => e.stopPropagation()}>
         <h3 style={{marginBottom:"20px"}}>Add session — {job.name}</h3>
-
-        <label style={{display: "block", marginBottom:"10px"}}>
+        <label className={styles.title}>
           Date　
           <input
             value={date}
@@ -50,7 +49,7 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
         <div
           style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}
         >
-         <label style={{display: "block", marginBottom:"10px"}}>
+         <label className={styles.title}>
             Start　
             <input
               type="time"
@@ -58,7 +57,7 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
               onChange={(e) => setStart(e.target.value)}
             />
           </label>
-          <label style={{display: "block", marginBottom:"10px"}}>
+          <label className={styles.title}>
             End　
             <input
               type="time"
@@ -68,56 +67,32 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
           </label>
         </div>
 
-        {/* <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}
-        >
-         <label style={{display: "block", marginBottom:"10px"}}>
-            Rest start (optional)　</label>
-            <input
-              type="time"
-              value={restStart}
-            onChange={(e) => setRestStart(e.target.value)} style={{width : "50%"}}
-            />
-          <label style={{display: "block", marginBottom:"10px"}}>
-            Rest end (optional)　</label>
-            <input
-              type="time"
-              value={restEnd}
-              onChange={(e) => setRestEnd(e.target.value)}style={{width : "50%"}}
-            />
-          
-        </div> */}
-              <div className={styles.restGrid}>
-  <div className={styles.restField}>
-    <label>Rest start (optional)</label>
-    <input
-      type="time"
-      value={restStart}
-      onChange={(e) => setRestStart(e.target.value)}
-    />
-  </div>
-  <div className={styles.restField}>
-    <label>Rest end (optional)</label>
-    <input
-      type="time"
-      value={restEnd}
-      onChange={(e) => setRestEnd(e.target.value)}
-    />
-  </div>
-</div>
-
+        <div className={styles.restGrid}>
+            <label className={styles.title}>Break start
+              <input
+                type="time"
+                value={restStart}
+              onChange={(e) => setRestStart(e.target.value)} />
+          </label>
+            <label className={styles.title}>Break end
+              <input
+                type="time"
+                value={restEnd}
+              onChange={(e) => setRestEnd(e.target.value)} />
+            </label>
+        </div>
 
         <div style={{ marginTop: 8 }}>
-          <div>Worked: {(preview.workedMinutes / 60).toFixed(2)} h</div>
-          <div>Night: {(preview.nightMinutes / 60).toFixed(2)} h</div>
-          <div>
+          <div>Worked time : {(preview.workedMinutes / 60).toFixed(2)} h</div>
+          <div>Late night : {(preview.nightMinutes / 60).toFixed(2)} h</div>
+          {/* <div>
             Total:{" "}
             {new Intl.NumberFormat("ja-JP", {
               style: "currency",
               currency: "JPY",
               maximumFractionDigits: 0,
             }).format(preview.total)}
-          </div>
+          </div> */}
         </div>
 
         <div

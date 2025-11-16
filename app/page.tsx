@@ -33,7 +33,7 @@ export default function HomePage() {
     null
   );
   const [limit] = useClientStoredState<number>("sb_limit", 0);
-  const { formatFromJPY } = useCurrency(); // ← 追加
+  const { formatFromJPY } = useCurrency();
 
   const [popupFor, setPopupFor] = useState<string | null>(null);
   const [npVisible, setNpVisible] = useState(false);
@@ -51,12 +51,30 @@ export default function HomePage() {
     income === undefined ||
     balanceOverride === undefined
   ) {
-    return <div style={{ padding: 20 }}>読み込み中…</div>;
+    return <div style={{ padding: 20 }}>Loading…</div>;
   }
 
   const totalSpent = categories.reduce((s, c) => s + (c.spent || 0), 0);
   const computedBalance = (income || 0) - totalSpent;
   const balance = balanceOverride !== null ? balanceOverride : computedBalance;
+
+const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth(); // 0–11
+
+const totalSpentThisMonth = categories.reduce((sum, cat) => {
+  const monthly = (cat.history || []).filter((h) => {
+    const d = new Date(h.timestamp);
+    return (
+      d.getFullYear() === currentYear &&
+      d.getMonth() === currentMonth
+    );
+  });
+
+  const catTotal = monthly.reduce((s, h) => s + h.amount, 0);
+  return sum + catTotal;
+}, 0);
+
 
   const addHistoryEntry = (catId: string, amount: number) => {
     const entry: HistoryEntry = {
@@ -154,15 +172,23 @@ export default function HomePage() {
   const current = popupFor
     ? categories.find((c) => c.id === popupFor) ?? null
     : null;
+  const monthlyRemaining = (limit) - totalSpentThisMonth;
+  const monthlyRemainingSafe = Math.max(0, monthlyRemaining);
 
   return (
     <div className={styles.container}>
       {/* Top bar */}
       <div className={styles.topBar}>
         <div className={styles.incomeDisplay}>
-          <div className={styles.infoTitle}>INCOME</div>
+          <div className={styles.infoTitle}>Income</div>
           <div style={{ fontSize: 18, fontWeight: 700 }}>
             {formatFromJPY(income || 0)}
+          </div>
+        </div>
+        <div className={styles.incomeDisplay}>
+          <div className={styles.infoTitle}>Balance</div>
+          <div style={{ fontSize: 18, fontWeight: 700 }}>
+            {formatFromJPY(balance || 0)}
           </div>
         </div>
       </div>
@@ -170,15 +196,12 @@ export default function HomePage() {
       {/* Limit / Balance band */}
       <div className={styles.balanceBand}>
         <div className={styles.infoCard}>
-          <div className={styles.infoTitle}>LIMIT BUDGET</div>
-          <div className={styles.infoValue}>{formatFromJPY(limit || 0)}</div>
-        </div>
-        <div className={styles.infoCard}>
-          <div className={styles.infoTitle}>BALANCE</div>
-          <div className={styles.infoValue}>{formatFromJPY(balance || 0)}</div>
+          <div className={styles.infoTitle}>Monthly Limit : {formatFromJPY(limit || 0)}</div>
+          <div className={styles.infoTitle}>Remaining : {formatFromJPY(monthlyRemainingSafe)}
+          </div>
         </div>
       </div>
-
+      
       {/* Category grid */}
       <div className={styles.categoryGrid}>
         {categories.map((cat) => (
@@ -211,16 +234,16 @@ export default function HomePage() {
                   color: "red",
                 }}
               >
-                ー
+            <FontAwesomeIcon icon={faTrash}/>
               </button>
             </div>
 
             <div className={styles.spentAmount}>{formatFromJPY(cat.spent)}</div>
 
             <div style={{ fontSize: 12, color: "#666", textAlign: "left" }}>
-              <div>履歴: {(cat.history || []).length} 件</div>
+              <div>History : {(cat.history || []).length}</div>
               <div style={{ marginTop: 6, fontSize: 11, color: "#999" }}>
-                Limit: {cat.limit > 0 ? formatFromJPY(cat.limit) : "未設定"}
+                Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "No limit"}
               </div>
             </div>
           </div>
@@ -271,7 +294,7 @@ export default function HomePage() {
                   cursor: "pointer",
                 }}
               >
-                閉じる
+                Close
               </button>
             </div>
 
@@ -285,14 +308,14 @@ export default function HomePage() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: 12, color: "#666" }}>現在の合計</div>
+                  <div style={{ fontSize: 12, color: "#666" }}>Amount</div>
                   <div style={{ fontSize: 18, fontWeight: 700 }}>
                     {formatFromJPY(current.spent)}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <button
-                    onClick={() => openNumberPadForAdd(current.id)} // MODIFIED: Use new add function
+                    onClick={() => openNumberPadForAdd(current.id)} 
                     style={{
                       padding: "8px 12px",
                       background: "#4f46e5",
@@ -309,10 +332,10 @@ export default function HomePage() {
 
               <div style={{ borderTop: "1px solid #eee", paddingTop: 8 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
-                  履歴
+                  History
                 </div>
                 {(current.history || []).length === 0 ? (
-                  <div style={{ color: "#666" }}>履歴がありません</div>
+                  <div style={{ color: "#666" }}>No History</div>
                 ) : (
                   <ul className={styles.historyList}>
                     {current
@@ -395,14 +418,14 @@ export default function HomePage() {
             style={{ padding: 16 }}
           >
             <div style={{ fontWeight: 700, marginBottom: 8 }}>
-              新しいカテゴリを追加
+              Create new category
             </div>
             <input
               value={newCatName}
               onChange={(e) => setNewCatName(e.target.value)}
-              placeholder="カテゴリ名"
+              placeholder="Category name"
               style={{
-                width: "100%",
+                width: "95%",
                 padding: 8,
                 borderRadius: 6,
                 border: "1px solid #ddd",
@@ -416,7 +439,7 @@ export default function HomePage() {
                 onClick={() => setNewCatModalOpen(false)}
                 style={{ padding: "8px 12px" }}
               >
-                キャンセル
+                Cancel
               </button>
               <button
                 onClick={() => {
@@ -433,7 +456,7 @@ export default function HomePage() {
                   borderRadius: 6,
                 }}
               >
-                追加
+                Add
               </button>
             </div>
           </div>
