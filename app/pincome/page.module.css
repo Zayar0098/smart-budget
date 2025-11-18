@@ -85,11 +85,14 @@
     font-size: 16px;
   }
 }
+
 .historytable {
   width: 100%;
   border-collapse: collapse;
   margin-top: 12px;
   font-size: 14px;
+  margin-bottom: 60px;
+
 }
 
 .historytable th,
@@ -123,19 +126,18 @@
 
 /* delete button on job cards */
 .jobcard .deletebtn {
-  background: #fff;
-  color: #b91c1c; /* red text */
-  border: 1px solid #f87171;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 13px;
+  padding: 8px;
+  background-color: #fce8e8;
+  color: #cc0000; 
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
   cursor: pointer;
+  margin: 2px;
   transition: background 120ms ease, color 120ms ease, transform 120ms ease;
 }
+
 .jobcard .deletebtn:hover {
-  background: #fee2e2; /* light red background */
-  color: #7f1d1d;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .jobformContainer {
@@ -238,8 +240,6 @@
   flex-direction: column;
 }
 
-
-/* --- 📱 Mobile responsiveness --- */
 @media (max-width: 600px) {
   .formRow {
     flex-direction: column;

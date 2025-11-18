@@ -53,12 +53,6 @@ export default function Page() {
         setNpTarget(null);
     };
 
-    const clearBalanceOverride = () => {
-        // setBalanceOverride はフック内の同期関数に置き換え
-        if (!confirm("手動バランス上書きを解除して自動計算に戻しますか？")) return;
-        setBalanceOverride(null);
-    };
-
     const formatYen = (n: number) =>
         n.toLocaleString("ja-JP", {
             style: "currency",
@@ -67,7 +61,7 @@ export default function Page() {
         });
 
     return (
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: "16px", maxWidth: "960px", margin: "0 auto" }}>
             <h1>Settings</h1>
 
             <div style={{ display: "grid", gap: 12, maxWidth: 720 }}>
@@ -89,7 +83,7 @@ export default function Page() {
                         </div>
                     </div>
                     <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => openNp("income")}>編集</button>
+                        <button onClick={() => openNp("income")}>Edit</button>
                     </div>
                 </div>
 
@@ -107,11 +101,11 @@ export default function Page() {
                     <div>
                         <div style={{ fontSize: 13, color: "#666" }}>Limit</div>
                         <div style={{ fontSize: 18, fontWeight: 600 }}>
-                            {limit > 0 ? formatYen(limit) : "未設定"}
+                            {limit > 0 ? formatYen(limit) : "Not set"}
                         </div>
                     </div>
                     <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => openNp("limit")}>編集</button>
+                        <button onClick={() => openNp("limit")}>Edit</button>
                     </div>
                 </div>
 
@@ -128,7 +122,7 @@ export default function Page() {
                 >
                     <div>
                         <div style={{ fontSize: 13, color: "#666" }}>
-                            Balance ({balanceOverride !== null ? "手動" : "自動"})
+                            Balance 
                         </div>
                         <div style={{ fontSize: 18, fontWeight: 600 }}>
                             {formatYen(balance)}
@@ -136,12 +130,6 @@ export default function Page() {
                         <div style={{ fontSize: 12, color: "#666", marginTop: 6 }}>
                             Total Spent: {formatYen(totalSpent)}
                         </div>
-                    </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => openNp("balance")}>編集</button>
-                        {balanceOverride !== null && (
-                            <button onClick={clearBalanceOverride}>自動に戻す</button>
-                        )}
                     </div>
                 </div>
             </div>

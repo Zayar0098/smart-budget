@@ -21,10 +21,10 @@ export default function HomePage() {
   const [categories, setCategories] = useClientStoredState<Category[]>(
     "sb_categories",
     [
-      { id: "rent-house", name: "家賃", spent: 0, limit: 0, history: [] },
-      { id: "gas-bill", name: "ガス代", spent: 0, limit: 0, history: [] },
-      { id: "electric", name: "電気代", spent: 0, limit: 0, history: [] },
-      { id: "water", name: "水道代", spent: 0, limit: 0, history: [] },
+      { id: "rent-house", name: "Rent-house", spent: 0, limit: 0, history: [] },
+      { id: "gas-bill", name: "Gas", spent: 0, limit: 0, history: [] },
+      { id: "electric", name: "Electric", spent: 0, limit: 0, history: [] },
+      { id: "water", name: "Water", spent: 0, limit: 0, history: [] },
     ]
   );
   const [income] = useClientStoredState<number>("sb_income", 0);
@@ -60,7 +60,7 @@ export default function HomePage() {
 
 const now = new Date();
 const currentYear = now.getFullYear();
-const currentMonth = now.getMonth(); // 0–11
+const currentMonth = now.getMonth(); 
 
 const totalSpentThisMonth = categories.reduce((sum, cat) => {
   const monthly = (cat.history || []).filter((h) => {
@@ -212,30 +212,7 @@ const totalSpentThisMonth = categories.reduce((sum, cat) => {
             style={{ cursor: "pointer" }}
           >
             <div className={styles.categoryHeader}>
-              <strong style={{ fontSize: 14 }}>{cat.name}</strong>
-              {/* Delete Button */}
-              <button
-                aria-label={`Delete ${cat.name}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteCategory(cat.id);
-                }}
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 16,
-                  background: "#fff",
-                  border: "1px solid #ddd",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  fontSize: 16,
-                  color: "red",
-                }}
-              >
-            <FontAwesomeIcon icon={faTrash}/>
-              </button>
+              <strong style={{ fontSize: 16 }}>{cat.name}</strong>
             </div>
 
             <div className={styles.spentAmount}>{formatFromJPY(cat.spent)}</div>
@@ -286,15 +263,18 @@ const totalSpentThisMonth = categories.reduce((sum, cat) => {
               }}
             >
               <div style={{ fontWeight: 700 }}>{current.name}</div>
-              <button
-                onClick={closeCategoryPopup}
+               <button
+                aria-label={`Delete ${current.name}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteCategory(current.id);
+                }}
                 style={{
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
+                  color:"#fff",
+                  backgroundColor: "#ff3d3dff",
                 }}
               >
-                Close
+                Delete 
               </button>
             </div>
 
@@ -414,7 +394,7 @@ const totalSpentThisMonth = categories.reduce((sum, cat) => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={styles.modalContent}
+            className={styles.modalCategory}
             style={{ padding: 16 }}
           >
             <div style={{ fontWeight: 700, marginBottom: 8 }}>
@@ -425,7 +405,7 @@ const totalSpentThisMonth = categories.reduce((sum, cat) => {
               onChange={(e) => setNewCatName(e.target.value)}
               placeholder="Category name"
               style={{
-                width: "95%",
+                width: "100%",
                 padding: 8,
                 borderRadius: 6,
                 border: "1px solid #ddd",

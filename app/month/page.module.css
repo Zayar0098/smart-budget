@@ -25,11 +25,27 @@
   font-weight: 600;
 }
 
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
+}
+
+.weekHeaderCell {
+  padding: 6px 0;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-bottom: 50px;
+  gap: 6px;
+}
+
+.emptyCell {
+  height: 50px;
 }
 
 .dayBox {
@@ -37,8 +53,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 6px;
-  min-height: 50px;
-  min-width: 20px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -63,4 +78,92 @@
   margin-top: 10px;
   font-size: 11px;
   color: #999;
+  margin-bottom: 30px;
+}
+
+.historyContainer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.historyHeader {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* Scrollable but RESPONSIVE */
+.historyList {
+  max-height: 260px;
+  overflow-y: auto;
+  display: grid;
+  gap: 10px;
+  padding-right: 6px;
+
+  -webkit-overflow-scrolling: touch; /* mobile smooth scroll */
+}
+
+.noHistory {
+  color: #666;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.historyAmount {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.historyDateTitle{
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.historyDate {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin: 0 8px;
+}
+
+.historyActions button {
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.historyEditButton {
+  padding: 6px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+.historyDeleteButton {
+  padding: 6px;
+  background: #fce8e8;
+  color: #c00;
+  border: none;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px){
+  .emptyCell,.dayBox{
+    width: 35px;
+  }
+
+  .spentAmount{
+    font-size: 8px;
+  }
 }
