@@ -20,12 +20,10 @@ export default function IncomePage() {
   const [jobs, setJobs] = useState<JobType[]>(() => loadJobs());
     const [activeJobId, setActiveJobId] = useState<string | null>(null);
     const { formatFromJPY } = useCurrency();
-
+const refresh = () => setJobs(loadJobs());
   useEffect(() => {
     recalcAllTotals();
   }, []);
-
-  const refresh = () => setJobs(loadJobs());
 
   const onJobSaved = () => refresh();
 
@@ -40,7 +38,7 @@ export default function IncomePage() {
       if (activeJobId === jobId) setActiveJobId(null);
       refresh();
     } else {
-    //   alert("Failed to delete job.");
+      //   alert("Failed to delete job.");
     }
   };
 
