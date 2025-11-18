@@ -172,7 +172,7 @@ const totalSpentThisMonth = categories.reduce((sum, cat) => {
   const current = popupFor
     ? categories.find((c) => c.id === popupFor) ?? null
     : null;
-  const monthlyRemaining = (limit) - totalSpentThisMonth;
+  const monthlyRemaining = (limit ?? 0) - totalSpentThisMonth;
   const monthlyRemainingSafe = Math.max(0, monthlyRemaining);
 
   return (
