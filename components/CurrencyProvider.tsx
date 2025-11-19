@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import useClientStoredState from "./useClientStoredState";
 import 'flag-icons/css/flag-icons.min.css';
+import Image from "next/image";
 
 type Ctx = {
   selected: string;
@@ -55,20 +56,37 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
         let ratesData;
 
         // Use the primary API (ExchangeRate-API)
+        // if (API_KEY) {
+        //   const r = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/JPY`);
+        //   const d = await r.json();
+        //   ratesData = d?.conversion_rates;
+        // } else {
+        //   // Fallback to a free API (exchangerate.host) if API_KEY is missing
+        //   const res = await fetch(
+        //     `https://api.exchangerate.host/latest?base=JPY&symbols=${encodeURIComponent(
+        //       DEFAULT_CURRENCIES.join(",")
+        //     )}`
+        //   );
+        //   const d = await res.json();
+        //   ratesData = d?.rates;
+        // }
         if (API_KEY) {
-          const r = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/JPY`);
-          const d = await r.json();
-          ratesData = d?.conversion_rates;
-        } else {
-          // Fallback to a free API (exchangerate.host) if API_KEY is missing
-          const res = await fetch(
-            `https://api.exchangerate.host/latest?base=JPY&symbols=${encodeURIComponent(
-              DEFAULT_CURRENCIES.join(",")
-            )}`
-          );
-          const d = await res.json();
-          ratesData = d?.rates;
-        }
+  const r = await fetch(
+    `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/JPY`,
+    { cache: "no-store" }
+  );
+  const d = await r.json();
+  ratesData = d?.conversion_rates;
+} else {
+  const res = await fetch(
+    `https://api.exchangerate.host/latest?base=JPY&symbols=${encodeURIComponent(
+      DEFAULT_CURRENCIES.join(",")
+    )}`,
+    { cache: "no-store" }
+  );
+  const d = await res.json();
+  ratesData = d?.rates;
+}
 
         if (!mounted) return;
         setRates(ratesData ?? { JPY: 1 });
@@ -141,7 +159,6 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
       <div style={{ borderBottom: "1px solid #eee" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 12 }}>
           <div style={{ fontWeight: 700 }}>Smart Budget</div>
-
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
   <div style={{ fontSize: 12, color: "#666" }}>
     {loading ? "Loading" : error ? "レートエラー" : "Currency"}

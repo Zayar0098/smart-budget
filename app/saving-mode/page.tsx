@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from "./page.module.css"
 
 type Category = {
   id: string;
@@ -18,19 +19,18 @@ export default function SavingModePage() {
     return [];
   });
 
-  // local edits for limits (string to keep user input until saved)
+
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem("sb_categories", JSON.stringify(categories));
-    // initialize edits for any new categories
+    
     setEdits((prev) => {
       const next = { ...prev };
       categories.forEach((c) => {
         if (!(c.id in next)) next[c.id] = String(c.limit || "");
       });
-      // remove edits for deleted categories
       Object.keys(next).forEach((k) => {
         if (!categories.some((c) => c.id === k)) delete next[k];
       });
@@ -61,7 +61,7 @@ export default function SavingModePage() {
     const raw = edits[id] ?? "";
     const num = Number(raw || 0);
     if (isNaN(num) || num < 0) {
-      alert("正しいリミットを入力してください（0以上の数値）。");
+      alert("Please enter a valid limit (>=0).");
       return;
     }
     setCategories((prev) =>
@@ -79,7 +79,7 @@ export default function SavingModePage() {
   };
 
   const resetLimit = (id: string) => {
-    if (!confirm("このカテゴリのリミットをリセットしますか？")) return;
+    if (!confirm("Do you want to reset the limit for this category?")) return;
     setCategories((prev) =>
       prev.map((c) => (c.id === id ? { ...c, limit: 0 } : c))
     );
@@ -87,7 +87,7 @@ export default function SavingModePage() {
   };
 
   const setAllToZero = () => {
-    if (!confirm("すべてのカテゴリのリミットを0にしますか？")) return;
+    if (!confirm("Do you want to set all category limits to 0?")) return;
     setCategories((prev) => prev.map((c) => ({ ...c, limit: 0 })));
     setEdits(() => {
       const next: Record<string, string> = {};
@@ -97,34 +97,16 @@ export default function SavingModePage() {
     setEditingId(null);
   };
 
-  const saveAll = () => {
-    // validate first
-    for (const c of categories) {
-      const raw = edits[c.id] ?? "";
-      const num = Number(raw || 0);
-      if (isNaN(num) || num < 0) {
-        alert(`カテゴリ "${c.name}" のリミットが不正です。`);
-        return;
-      }
-    }
-    setCategories((prev) =>
-      prev.map((c) => ({ ...c, limit: Math.round(Number(edits[c.id] || 0)) }))
-    );
-    setEditingId(null);
-    alert("すべてのリミットを保存しました。");
-  };
-
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Saving Mode — リミット管理</h1>
+    <div className={styles.container}>
+      <h1>Saving Mode — Limit Management</h1>
       <p>
-        ここで各カテゴリのリミットを設定・編集します。Home
-        ではリミットは表示されません。
+        Here you can set and edit the limit for each category.
       </p>
 
       {categories.length === 0 ? (
         <p>
-          カテゴリが見つかりません。まず Home でカテゴリを作成してください。
+          No category added.
         </p>
       ) : (
         <>
@@ -138,16 +120,9 @@ export default function SavingModePage() {
               return (
                 <div
                   key={c.id}
-                  style={{
-                    border: "1px solid #e5e7eb",
-                    padding: 12,
-                    borderRadius: 8,
-                    display: "flex",
-                    gap: 12,
-                    alignItems: "center",
-                  }}
+                  className={styles.card}
                 >
-                  <div style={{ flex: 1 }}>
+                  <div style={{ width: "100%" }}>
                     <div
                       style={{
                         display: "flex",
@@ -179,14 +154,14 @@ export default function SavingModePage() {
                         />
                       </div>
                       <div style={{ marginTop: 6, fontSize: 13 }}>
-                        リミット: {c.limit > 0 ? formatYen(c.limit) : "未設定"}{" "}
-                        ・ 使用率: {percent}%
+                        Limit : {c.limit > 0 ? formatYen(c.limit) : "Not set"}{" "}
+                        ・ Usage : {percent}%
                       </div>
                     </div>
                   </div>
 
                   <div
-                    style={{ display: "flex", gap: 8, alignItems: "center" }}
+                    className={styles.rightButtons}
                   >
                     {editingId === c.id ? (
                       <>
@@ -196,30 +171,21 @@ export default function SavingModePage() {
                           onChange={(e) =>
                             updateEditValue(c.id, e.target.value)
                           }
-                          style={{ width: 140 }}
+                          style={{ width: 100 }}
                         />
-                        <button onClick={() => saveLimit(c.id)}>保存</button>
+                        <button onClick={() => saveLimit(c.id)}>Save</button>
                         <button onClick={() => cancelEdit(c.id)}>
-                          キャンセル
+                          Cancel
                         </button>
                         <button onClick={() => resetLimit(c.id)}>
-                          リセット
+                          Reset
                         </button>
                       </>
                     ) : (
                       <>
-                        <div
-                          style={{
-                            minWidth: 140,
-                            textAlign: "right",
-                            color: "#333",
-                          }}
-                        >
-                          {c.limit > 0 ? formatYen(c.limit) : "未設定"}
-                        </div>
-                        <button onClick={() => startEdit(c.id)}>編集</button>
+                        <button onClick={() => startEdit(c.id)}>Edit</button>
                         <button onClick={() => resetLimit(c.id)}>
-                          リセット
+                          Reset
                         </button>
                       </>
                     )}
@@ -230,8 +196,7 @@ export default function SavingModePage() {
           </div>
 
           <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-            <button onClick={saveAll}>すべて保存</button>
-            <button onClick={setAllToZero}>すべて0にリセット</button>
+            <button onClick={setAllToZero}>Reset All</button>
           </div>
         </>
       )}
