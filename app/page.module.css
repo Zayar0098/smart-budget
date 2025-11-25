@@ -132,32 +132,34 @@
   height: 150px;
 }
 
-.historyList {
-  flex: 1;   
-  margin: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
+.historyDateGroup {
+  margin-bottom: 16px;
+  list-style-type: none;
 }
 
-.historyItem {
-  display: flex; 
-  justify-content: space-between; 
+.historyDateHeader {
+  font-size: 14px;
+  font-weight: 700;
+  color: #444;
+}
+
+.historyRow {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid #f0f0f0;
-  padding: 8px;
-  border-radius: 8px;
 }
 
 .historyAmount {
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
+  width: 20%;
 }
 
-.historyDate {
-  font-size: 12px;
+.historyTime {
+  font-size: 14px;
   color: #666;
-  text-align: right;
-  margin-right: 10px;
 }
 
 .historyEditButton,.historyDeleteButton{

@@ -86,7 +86,7 @@
   }
 }
 
-.historytable {
+/* .historytable {
   width: 100%;
   border-collapse: collapse;
   margin-top: 12px;
@@ -108,23 +108,66 @@
 
 .historytable tbody tr:nth-child(even) {
   background-color: #fafafa;
+}*/
+.historyContainer {
+  width: 100%;
 }
 
-/* make table horizontally scrollable on small screens */
-@media (max-width: 600px) {
-  .historytable {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  .historytable th,
-  .historytable td {
-    white-space: nowrap;
-  }
+.monthSection {
+  margin-bottom: 32px;
 }
 
-/* delete button on job cards */
+.monthHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.monthTitle {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.monthTotal {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.historyCard {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.jobName {
+  font-weight: 600;
+}
+
+.amount {
+  font-weight: 700;
+  color: #111;
+}
+
+.cardBody div {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
 .jobcard .deletebtn {
   padding: 8px;
   background-color: #fce8e8;
@@ -254,3 +297,4 @@
     width: 100%;
   }
 }
+

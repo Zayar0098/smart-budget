@@ -10,8 +10,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <CurrencyProvider>{children}</CurrencyProvider>
-        <BottomNav/>
+        <CurrencyProvider>
+          {children}</CurrencyProvider>
+        <BottomNav />
       </body>
     </html>
   );

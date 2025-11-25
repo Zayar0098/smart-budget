@@ -40,6 +40,7 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
         <label className={styles.title}>
           Date　
           <input
+            type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             placeholder="YYYY-MM-DD"
@@ -85,14 +86,6 @@ export default function JobModal({ job, open, onClose, onSaved }: Props) {
         <div style={{ marginTop: 8 }}>
           <div>Worked time : {(preview.workedMinutes / 60).toFixed(2)} h</div>
           <div>Late night : {(preview.nightMinutes / 60).toFixed(2)} h</div>
-          {/* <div>
-            Total:{" "}
-            {new Intl.NumberFormat("ja-JP", {
-              style: "currency",
-              currency: "JPY",
-              maximumFractionDigits: 0,
-            }).format(preview.total)}
-          </div> */}
         </div>
 
         <div

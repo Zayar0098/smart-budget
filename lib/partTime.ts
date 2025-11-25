@@ -123,8 +123,8 @@ export function calculatePay(
     }
   }
 
-  const night = Math.min(nightMinutes, worked);
-  const normal = Math.max(0, worked - night);
+const night = Math.min(nightMinutes, worked);
+const normal = Math.max(0, worked - night);
 
   const normalHours = normal / 60;
   const nightHours = night / 60;
@@ -253,3 +253,4 @@ export function calculateOverallTotal(): number {
 
   return Math.round(total * 100) / 100;
 }
+

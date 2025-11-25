@@ -1,9 +1,5 @@
-// /hooks/useSharedAppState.ts
-
 import { useState, useEffect } from "react";
 
-// HomePageの型定義を再利用（ここではCategory型は省略し、anyとして扱います）
-// 実際にはHomePageからCategory, HistoryEntryの型定義を移動させるのがベストです
 type Category = any;
 
 const safeParse = (key: string, defaultValue: any) => {
