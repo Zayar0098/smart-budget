@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import useClientStoredState from "./useClientStoredState";
 import 'flag-icons/css/flag-icons.min.css';
-import Image from "next/image";
 
 type Ctx = {
   selected: string;
@@ -156,7 +155,7 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
 
   return (
     <CurrencyContext.Provider value={value}>
-      <div style={{ borderBottom: "1px solid #eee" }}>
+      <div style={{ background:"#fff", borderBottom: "1px solid #eee" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 12 }}>
           <div style={{ fontWeight: 700 }}>Smart Budget</div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

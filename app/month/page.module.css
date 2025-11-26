@@ -99,9 +99,7 @@
   overflow-y: auto;
   display: grid;
   gap: 10px;
-  padding-right: 6px;
-
-  -webkit-overflow-scrolling: touch; /* mobile smooth scroll */
+  -webkit-overflow-scrolling: touch; 
 }
 
 .noHistory {
@@ -114,7 +112,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fafafa;
+  background: #fff;
   border: 1px solid #eee;
   padding: 10px;
   border-radius: 8px;
@@ -122,11 +120,12 @@
 
 .historyCategory{
   font-size: 12px;
+  width: 65px;
 }
 
 .historyAmount {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .historyDateTitle{

@@ -8,9 +8,10 @@ type Row = HistoryEntry & { jobId: string; jobName: string };
 
 type Props = {
   jobs: Job[];
+  onDelete?: (jobId: string, historyId: string) => void; // <-- add
 };
 
-export default function HistoryTable({ jobs }: Props) {
+export default function HistoryTable({ jobs, onDelete }: Props) {
   const { formatFromJPY } = useCurrency();
 
   // Build flat rows
@@ -41,36 +42,45 @@ export default function HistoryTable({ jobs }: Props) {
   return (
     <div className={styles.historyContainer}>
       {Object.keys(grouped)
-        .sort((a, b) => (a < b ? 1 : -1)) // new → old
+        .sort((a, b) => (a < b ? 1 : -1))
         .map((month) => (
           <div key={month} className={styles.monthSection}>
-            {/* === MONTH HEADER === */}
+            {/* MONTH HEADER */}
             <div className={styles.monthHeader}>
-              <div className={styles.monthTitle}>
-                {month}  
-              </div>
+              <div className={styles.monthTitle}>{month}</div>
               <div className={styles.monthTotal}>
                 {formatFromJPY(monthlyTotals[month])}
               </div>
             </div>
 
-            {/* === CARDS FOR EACH DAY === */}
             <div className={styles.cardList}>
               {grouped[month].map((r) => (
                 <div key={r.id} className={styles.historyCard}>
                   <div className={styles.cardHeader}>
                     <span className={styles.jobName}>{r.jobName}</span>
-                    <span className={styles.amount}>{formatFromJPY(r.total)}</span>
+                    <span className={styles.amount}>
+                      {formatFromJPY(r.total)}
+                    </span>
                   </div>
 
                   <div className={styles.cardBody}>
-                    <div><strong>Date:</strong> {r.date}</div>
-                    <div><strong>Time:</strong> {r.startTime} → {r.endTime}</div>
                     <div>
+                    <strong>Date:</strong> {r.date}<br />
+                      <strong>Time:</strong> {r.startTime} → {r.endTime}<br />
                       <strong>Break:</strong>{" "}
                       {r.restStart ? `${r.restStart} → ${r.restEnd}` : "-"}
                     </div>
+                    <div>
+                      <button
+                    className={styles.deleteButton}
+                    onClick={() => onDelete?.(r.jobId, r.id)}
+                  >
+                    Delete
+                  </button>
+                    </div>
                   </div>
+
+                  {/* DELETE BUTTON */}
                 </div>
               ))}
             </div>

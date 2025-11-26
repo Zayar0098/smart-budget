@@ -241,16 +241,3 @@ export function recalcAllTotals() {
   saveJobs(jobs);
 }
 
-// overall total
-export function calculateOverallTotal(): number {
-  if (typeof window === "undefined") return 0;
-
-  const jobs = loadJobs();
-  const total = jobs.reduce(
-    (s, j) => s + (isFinite(j.total) ? j.total : 0),
-    0
-  );
-
-  return Math.round(total * 100) / 100;
-}
-

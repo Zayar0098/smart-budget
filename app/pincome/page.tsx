@@ -1,13 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useCurrency } from "@/components/CurrencyProvider";
 import JobForm from "../../components/JobForm";
 import JobCard from "../../components/JobCard";
 import JobModal from "../../components/JobModal";
 import {
   loadJobs,
   recalcAllTotals,
-  calculateOverallTotal,
   deleteJob,
   Job as JobType,
 } from "../../lib/partTime";
@@ -18,8 +16,7 @@ export default function IncomePage() {
   const [jobFormOpen, setJobFormOpen] = useState(false);
 
     const [activeJobId, setActiveJobId] = useState<string | null>(null);
-    const { formatFromJPY } = useCurrency();
-const refresh = () => setJobs(loadJobs());
+    const refresh = () => setJobs(loadJobs());
   useEffect(() => {
     recalcAllTotals();
   }, []);
@@ -45,6 +42,22 @@ const refresh = () => setJobs(loadJobs());
 useEffect(() => {
   setJobs(loadJobs());
 }, []);
+  
+  function handleDeleteSession(jobId: string, sessionId: string) {
+  setJobs(prev =>
+    prev.map(job => {
+      if (job.id !== jobId) return job;
+
+      const updatedHistory = job.history.filter(h => h.id !== sessionId);
+
+      return {
+        ...job,
+        history: updatedHistory,
+        total: updatedHistory.reduce((sum, h) => sum + h.total, 0),
+      };
+    })
+  );
+}
 
 
   return (<>
@@ -54,11 +67,10 @@ useEffect(() => {
 >
   ＋
 </button>
-    <main style={{ padding: 16, maxWidth: 1000, margin: "0 auto" }}>
+    <main style={{ padding: 16, maxWidth: 1000, margin: "0 auto",background:"#f0f0f0"}}>
       <section>
-        <div style={{ display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+        <div>
           <h2>Part Time</h2>
-          <p>Overall:<strong>{formatFromJPY(calculateOverallTotal())}</strong></p>
         </div>
         {jobFormOpen && (
       <div className={styles.modalOverlay} onClick={() => setJobFormOpen(false)}>
@@ -89,8 +101,11 @@ useEffect(() => {
       </section>
 
       <section style={{ marginTop: 18 }}>
-        <h2>History</h2>
-          <HistoryTable jobs={jobs} />
+        <HistoryTable
+  jobs={jobs}
+  onDelete={(jobId, sessionId) => handleDeleteSession(jobId, sessionId)}
+/>
+
       </section>
 
       {activeJobId && (

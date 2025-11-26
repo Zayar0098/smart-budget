@@ -86,29 +86,6 @@
   }
 }
 
-/* .historytable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
-  font-size: 14px;
-  margin-bottom: 60px;
-
-}
-
-.historytable th,
-.historytable td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.historytable th {
-  background-color: #f5f5f5;
-}
-
-.historytable tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}*/
 .historyContainer {
   width: 100%;
 }
@@ -132,7 +109,6 @@
 .monthTotal {
   font-size: 18px;
   font-weight: 700;
-  color: #333;
 }
 
 .cardList {
@@ -150,6 +126,7 @@
 
 .cardHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
 }
@@ -159,13 +136,13 @@
 }
 
 .amount {
-  font-weight: 700;
   color: #111;
 }
 
-.cardBody div {
-  margin-bottom: 4px;
-  font-size: 14px;
+.cardBody{
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
 }
 
 .jobcard .deletebtn {

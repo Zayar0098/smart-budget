@@ -4,8 +4,8 @@
   margin: 0 auto;
 }
 
-/* Category card */
 .card {
+  background-color: #fff;
   border: 1px solid #e5e7eb;
   padding: 12px;
   border-radius: 8px;
@@ -14,7 +14,6 @@
   align-items: center;
 }
 
-/* Force vertical stacking on small screens */
 @media (max-width: 600px) {
   .card {
     flex-direction: column;

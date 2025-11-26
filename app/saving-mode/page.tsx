@@ -99,8 +99,8 @@ export default function SavingModePage() {
 
   return (
     <div className={styles.container}>
-      <h1>Saving Mode — Limit Management</h1>
-      <p>
+      <h2>Saving Mode — Limit Management</h2>
+      <p style={{margin:"10px 0"}}>
         Here you can set and edit the limit for each category.
       </p>
 

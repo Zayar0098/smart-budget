@@ -2,6 +2,7 @@
   padding: 16px;
   max-width: 960px;
   margin: 0 auto;
+  background-color: #f0f0f0;
 }
 
 .topBar {
@@ -24,7 +25,7 @@
 
 .infoCard {
   flex: 1;
-  background: #f0f0f0;
+  background: #fff;
   padding: 14px;
   border-radius: 6px;
   text-align: center;
@@ -50,7 +51,7 @@
   width: 100%;
   max-width: 160px;
   height: 140px;
-  background: #f1f1f1;
+  background: #fff;
   border-radius: 8px;
   padding: 12px;
   box-sizing: border-box;

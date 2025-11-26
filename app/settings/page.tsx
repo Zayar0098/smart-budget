@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import NumberPad from "@/components/NumberPad";
-// 既存のuseSharedAppStateを新しいものに置き換える
 import useSharedAppState from "../../hooks/useSharedAppState"; 
+import styles from "./page.module.css";
 
 export default function Page() {
-    // データの読み込みと更新をカスタムフックに一元化
     const { 
         income, 
         setIncome, 
@@ -15,9 +14,7 @@ export default function Page() {
         balanceOverride, 
         setBalanceOverride, 
         categories 
-    } = useSharedAppState(); 
-    
-    // ... (既存の totalSpent, computedBalance, balance の計算ロジックはそのまま) ...
+    } = useSharedAppState();
 
     type Category = { spent?: number };
     const typedCategories: Category[] = categories as Category[];
@@ -25,15 +22,12 @@ export default function Page() {
         (s: number, c: Category) => s + (c.spent || 0),
         0
     );
+
     const computedBalance = income - totalSpent;
     const balance = balanceOverride !== null ? balanceOverride : computedBalance;
 
-
-    // NumberPad control
     const [npVisible, setNpVisible] = useState(false);
-    const [npTarget, setNpTarget] = useState<
-        "income" | "limit" | "balance" | null
-    >(null);
+    const [npTarget, setNpTarget] = useState<"income" | "limit" | "balance" | null>(null);
 
     const openNp = (target: "income" | "limit" | "balance") => {
         setNpTarget(target);
@@ -41,14 +35,10 @@ export default function Page() {
     };
 
     const onConfirmNp = (value: number) => {
-        // setIncome, setLimit, setBalanceOverride はフック内の同期関数に置き換え
-        if (npTarget === "income") {
-            setIncome(value);
-        } else if (npTarget === "limit") {
-            setLimit(value);
-        } else if (npTarget === "balance") {
-            setBalanceOverride(value);
-        }
+        if (npTarget === "income") setIncome(value);
+        else if (npTarget === "limit") setLimit(value);
+        else if (npTarget === "balance") setBalanceOverride(value);
+
         setNpVisible(false);
         setNpTarget(null);
     };
@@ -61,73 +51,41 @@ export default function Page() {
         });
 
     return (
-        <div style={{ padding: "16px", maxWidth: "960px", margin: "0 auto" }}>
-            <h1>Settings</h1>
+        <div className={styles.container}>
+            <h2 className={styles.title}>Settings</h2>
 
-            <div style={{ display: "grid", gap: 12, maxWidth: 720 }}>
-                {/* Income Card */}
-                <div
-                    style={{
-                        border: "1px solid #eee",
-                        padding: 12,
-                        borderRadius: 8,
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
+            <div className={styles.cardGrid}>
+                {/* Income */}
+                <div className={styles.card}>
                     <div>
-                        <div style={{ fontSize: 13, color: "#666" }}>Income</div>
-                        <div style={{ fontSize: 18, fontWeight: 600 }}>
-                            {formatYen(income)}
-                        </div>
+                        <div className={styles.cardLabel}>Income</div>
+                        <div className={styles.cardValue}>{formatYen(income)}</div>
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => openNp("income")}>Edit</button>
-                    </div>
+                    <button className={styles.editButton} onClick={() => openNp("income")}>
+                        Edit
+                    </button>
                 </div>
 
-                {/* Limit Card */}
-                <div
-                    style={{
-                        border: "1px solid #eee",
-                        padding: 12,
-                        borderRadius: 8,
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
+                {/* Limit */}
+                <div className={styles.card}>
                     <div>
-                        <div style={{ fontSize: 13, color: "#666" }}>Limit</div>
-                        <div style={{ fontSize: 18, fontWeight: 600 }}>
+                        <div className={styles.cardLabel}>Monthly Limit</div>
+                        <div className={styles.cardValue}>
                             {limit > 0 ? formatYen(limit) : "Not set"}
                         </div>
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => openNp("limit")}>Edit</button>
-                    </div>
+                    <button className={styles.editButton} onClick={() => openNp("limit")}>
+                        Edit
+                    </button>
                 </div>
 
-                {/* Balance Card */}
-                <div
-                    style={{
-                        border: "1px solid #eee",
-                        padding: 12,
-                        borderRadius: 8,
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
+                {/* Balance */}
+                <div className={styles.card}>
                     <div>
-                        <div style={{ fontSize: 13, color: "#666" }}>
-                            Balance 
-                        </div>
-                        <div style={{ fontSize: 18, fontWeight: 600 }}>
-                            {formatYen(balance)}
-                        </div>
-                        <div style={{ fontSize: 12, color: "#666", marginTop: 6 }}>
+                        <div className={styles.cardLabel}>Balance</div>
+                        <div className={styles.cardValue}>{formatYen(balance)}</div>
+
+                        <div className={styles.spentText}>
                             Total Spent: {formatYen(totalSpent)}
                         </div>
                     </div>
