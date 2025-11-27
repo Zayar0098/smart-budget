@@ -42,21 +42,22 @@
 /* --- Category Grid (Responsive) --- */
 .categoryGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(1, 1fr); 
   gap: 16px;
   justify-items: center;
 }
 
 .categoryItem {
   width: 100%;
-  max-width: 160px;
-  height: 140px;
+  /* max-width: 160px; */
+  height: 80px;
   background: #fff;
   border-radius: 8px;
   padding: 12px;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: transform 0.1s;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useClientStoredState from "@/components/useClientStoredState";
 import NumberPad from "@/components/NumberPad";
 import styles from "./page.module.css";
@@ -12,24 +12,18 @@ type HistoryEntry = { id: string; amount: number; timestamp: string };
 type Category = {
   id: string;
   name: string;
-  spent: number;
   limit: number;
   history?: HistoryEntry[];
 };
 
-// Key for storing the last time the budget was reset (YYYY-MM format)
-const LAST_RESET_KEY = "sb_last_reset_month";
-
 export default function HomePage() {
-  // --- 1. HOOKS (MUST BE CALLED UNCONDITIONALLY AT THE TOP) ---
-
   const [categories, setCategories] = useClientStoredState<Category[]>(
     "sb_categories",
     [
-      { id: "rent-house", name: "Rent-house", spent: 0, limit: 0, history: [] },
-      { id: "gas-bill", name: "Gas", spent: 0, limit: 0, history: [] },
-      { id: "electric", name: "Electric", spent: 0, limit: 0, history: [] },
-      { id: "water", name: "Water", spent: 0, limit: 0, history: [] },
+      { id: "rent-house", name: "Rent-house", limit: 0, history: [] },
+      { id: "gas-bill", name: "Gas", limit: 0, history: [] },
+      { id: "electric", name: "Electric", limit: 0, history: [] },
+      { id: "water", name: "Water", limit: 0, history: [] },
     ]
   );
 
@@ -39,14 +33,9 @@ export default function HomePage() {
   >("sb_balance_override", null);
   const [limit, setLimit] = useClientStoredState<number>("sb_limit", 0);
 
-  // State for tracking the last reset date
-  const [lastResetMonth, setLastResetMonth] = useClientStoredState<string>(
-    LAST_RESET_KEY,
-    "" // Initialize empty, will be set in useEffect
-  );
-
   const { formatFromJPY } = useCurrency();
 
+  // UI states
   const [popupFor, setPopupFor] = useState<string | null>(null);
   const [npVisible, setNpVisible] = useState(false);
   const [npTargetCategory, setNpTargetCategory] = useState<string | null>(null);
@@ -54,122 +43,26 @@ export default function HomePage() {
     null
   );
   const [npInitialValue, setNpInitialValue] = useState<string>("");
-
   const [newCatModalOpen, setNewCatModalOpen] = useState(false);
   const [newCatName, setNewCatName] = useState("");
-  
-  // NEW: 検索キーワードのステート
   const [searchTerm, setSearchTerm] = useState("");
 
-
-  // --- 2. RESET FUNCTION ---
-
-  const resetMonthlyBudget = () => {
-    const now = new Date();
-    const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-
-    // Reset spent only (history preserved)
-    setCategories((prev) =>
-      prev!.map((c) => ({
-        ...c,
-        spent: 0,
-      }))
-    );
-
-    // NOTE: income, limit, balanceOverride もリセットされます。
-    // 恒久的な値として残したい場合は、この行をコメントアウトしてください。
-    setIncome(0);
-    setLimit(0);
-    setBalanceOverride(null);
-
-    // mark reset month
-    setLastResetMonth(currentMonthYear);
-  };
-
-  function generateId() {
-    return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-  }
-  
-  // --- 3. AUTOMATIC MONTHLY CHECK (This is the correct one to keep) ---
-
-  useEffect(() => {
-    // データがロード中であれば処理を中断
-    if (lastResetMonth === undefined) return; 
-
-    const now = new Date();
-    const cy = now.getFullYear();
-    const cm = now.getMonth() + 1; // 1..12
-    const currentMonthYear = `${cy}-${cm}`;
-
-    // 1. lastResetMonthが空の場合 (初回実行時)、現在の月で初期化し、リセットはしない
-    if (!lastResetMonth) {
-      setLastResetMonth(currentMonthYear);
-      return;
-    }
-
-    // 2.  stored YYYY-M or YYYY-MM を解析
-    const parts = lastResetMonth.split("-").map((s) => Number(s));
-    const ly = parts[0] || 0;
-    const lm = parts[1] || 0;
-
-    // 3. 過去の年月と比較し、月が古ければリセットを実行
-    const isOlder = ly < cy || (ly === cy && lm < cm);
-    if (isOlder) {
-      resetMonthlyBudget();
-    }
-    // otherwise (same month or future) do nothing
-  }, [
-    lastResetMonth,
-    setLastResetMonth,
-    setCategories,
-    setIncome,
-    setLimit,
-    setBalanceOverride,
-  ]);
-  
-
-  // --- 4. CONDITIONAL EARLY RETURN (AFTER ALL HOOKS) ---
-
+  // loading guard: wait for stored states to load to avoid showing transient zeros
   if (
     categories === undefined ||
     income === undefined ||
     balanceOverride === undefined ||
-    lastResetMonth === undefined 
+    limit === undefined
   ) {
-    return <div style={{ padding: 20 }}>Loading…</div>;
+    return <div className={styles.container}>読み込み中…</div>;
   }
 
-  // --- 5. CALCULATIONS ---
+  // --- Helper to generate unique IDs ---
+  function generateId() {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  }
 
-  const totalSpent = categories.reduce((s, c) => s + (c.spent || 0), 0);
-  const computedBalance = (income || 0) - totalSpent;
-  const balance =
-    balanceOverride === null || balanceOverride === undefined
-      ? computedBalance
-      : balanceOverride;
-
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
-
-  const totalSpentThisMonth = categories.reduce((sum, cat) => {
-    const monthly = (cat.history || []).filter((h) => {
-      const d = new Date(h.timestamp);
-      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
-    });
-
-    const catTotal = monthly.reduce((s, h) => s + h.amount, 0);
-    return sum + catTotal;
-  }, 0);
-  
-  // NEW: 検索フィルタリングロジック
-  const filteredCategories = categories.filter(cat => 
-    cat.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-
-  // --- 6. HANDLERS ---
-
+  // --- Handlers ---
   const addHistoryEntry = (catId: string, amount: number) => {
     const entry: HistoryEntry = {
       id: generateId(),
@@ -178,17 +71,9 @@ export default function HomePage() {
     };
 
     setCategories((prev) =>
-      prev!.map((c) => {
-        if (c.id !== catId) return c;
-        // 新しい履歴配列を作成して重複を排除
-        const nextHistory = [...(c.history || []), entry];
-        const uniqHistory = Array.from(
-          new Map(nextHistory.map((h) => [h.id, h])).values()
-        );
-        // spent は履歴の合計から再計算（重複カウントを防ぐ）
-        const spent = uniqHistory.reduce((s, h) => s + h.amount, 0);
-        return { ...c, history: uniqHistory, spent };
-      })
+      (prev || []).map((c) =>
+        c.id === catId ? { ...c, history: [...(c.history || []), entry] } : c
+      )
     );
   };
 
@@ -198,21 +83,12 @@ export default function HomePage() {
     newAmount: number
   ) => {
     setCategories((prev) =>
-      prev!.map((c) => {
+      (prev || []).map((c) => {
         if (c.id !== catId) return c;
-
-        let newTotalSpent = 0;
-
-        const nextHistory = (c.history || []).map((h) => {
-          if (h.id === entryId) {
-            return { ...h, amount: newAmount };
-          }
-          return h;
-        });
-
-        newTotalSpent = nextHistory.reduce((s, x) => s + x.amount, 0);
-
-        return { ...c, history: nextHistory, spent: newTotalSpent };
+        const updatedHistory = (c.history || []).map((h) =>
+          h.id === entryId ? { ...h, amount: newAmount } : h
+        );
+        return { ...c, history: updatedHistory };
       })
     );
   };
@@ -236,21 +112,24 @@ export default function HomePage() {
   };
 
   const addCategoryConfirmed = (name: string) => {
-    const n = name.trim();
-    if (!n) return;
-    const idBase = n.toLowerCase().replace(/\s+/g, "-");
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const idBase = trimmed.toLowerCase().replace(/\s+/g, "-");
     let id = idBase;
     let i = 1;
-    while (categories.some((c) => c.id === id)) id = `${idBase}-${i++}`;
+    while ((categories || []).some((c) => c.id === id)) id = `${idBase}-${i++}`;
     setCategories((prev) => [
       ...(prev || []),
-      { id, name: n, spent: 0, limit: 0, history: [] },
+      { id, name: trimmed, limit: 0, history: [] },
     ]);
   };
 
-  const openCategoryPopup = (catId: string) => {
-    setPopupFor(catId);
+  const deleteCategory = (catId: string) => {
+    setCategories((prev) => (prev || []).filter((c) => c.id !== catId));
+    closeCategoryPopup();
   };
+
+  const openCategoryPopup = (catId: string) => setPopupFor(catId);
   const closeCategoryPopup = () => {
     setPopupFor(null);
     setNpVisible(false);
@@ -259,18 +138,52 @@ export default function HomePage() {
     setNpInitialValue("");
   };
 
-  const deleteCategory = (catId: string) => {
-    setCategories((prev) => prev!.filter((c) => c.id !== catId));
-    closeCategoryPopup();
+  // --- Date helpers for "this month" filtering ---
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth(); // 0-based
+
+  const isInCurrentMonth = (isoTs: string) => {
+    try {
+      const d = new Date(isoTs);
+      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
+    } catch {
+      return false;
+    }
   };
 
-  // --- 7. RENDER ---
+  // --- Calculations (only this month) ---
+  // per-category spent this month map
+  const monthlySpentByCategory = new Map<string, number>();
+  (categories || []).forEach((cat) => {
+    const s = (cat.history || [])
+      .filter((h) => isInCurrentMonth(h.timestamp))
+      .reduce((acc, h) => acc + h.amount, 0);
+    monthlySpentByCategory.set(cat.id, s);
+  });
 
+  const totalSpentThisMonth = Array.from(
+    monthlySpentByCategory.values()
+  ).reduce((s, v) => s + v, 0);
+
+  // Balance is income minus this month's spending
+  const computedBalanceThisMonth = (income || 0) - totalSpentThisMonth;
+  // keep override if set (override assumed to be absolute value user set)
+  const displayedBalance = balanceOverride ?? computedBalanceThisMonth;
+
+  const monthlyRemainingSafe = Math.max(0, (limit || 0) - totalSpentThisMonth);
+
+  // Search filter
+  const filteredCategories = (categories || []).filter((c) =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // --- Render ---
   const current = popupFor
-    ? categories.find((c) => c.id === popupFor) ?? null
+    ? (categories || []).find((c) => c.id === popupFor) ?? null
     : null;
-  const monthlyRemaining = (limit ?? 0) - totalSpentThisMonth;
-  const monthlyRemainingSafe = Math.max(0, monthlyRemaining);
+
+  // Group history by date (show all history but grouped; you can filter to only current month if desired)
   const historyByDate: Record<string, HistoryEntry[]> = {};
   if (current) {
     (current.history || []).forEach((h) => {
@@ -283,6 +196,7 @@ export default function HomePage() {
       historyByDate[d].push(h);
     });
   }
+
   return (
     <div className={styles.container}>
       {/* Top bar */}
@@ -294,9 +208,9 @@ export default function HomePage() {
           </div>
         </div>
         <div className={styles.incomeDisplay}>
-          <div className={styles.infoTitle}>Balance</div>
+          <div className={styles.infoTitle}>Balance (This month)</div>
           <div style={{ fontSize: 18, fontWeight: 700 }}>
-            {formatFromJPY(balance || 0)}
+            {formatFromJPY(displayedBalance)}
           </div>
         </div>
       </div>
@@ -312,29 +226,28 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      
-      {/* NEW: Search Bar */}
-      <div style={{ padding: '0', marginBottom: 16 }}>
-          <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                  width: '100%',
-                  padding: '10px 14px',
-                  borderRadius: 8,
-                  border: '1px solid #ddd',
-                  fontSize: 16,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                  outline: 'none',
-              }}
-          />
+
+      {/* Search */}
+      <div style={{ padding: 0, marginBottom: 16 }}>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px 14px",
+            borderRadius: 8,
+            border: "1px solid #ddd",
+            fontSize: 16,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+            outline: "none",
+          }}
+        />
       </div>
 
       {/* Category grid */}
       <div className={styles.categoryGrid}>
-        {/* フィルタリングされたカテゴリを使用 */}
         {filteredCategories.map((cat) => (
           <div
             key={cat.id}
@@ -343,26 +256,19 @@ export default function HomePage() {
             style={{ cursor: "pointer" }}
           >
             <div className={styles.categoryHeader}>
-              <strong style={{ fontSize: 16 }}>{cat.name}</strong>
+              <strong>{cat.name}</strong>
             </div>
-
-            <div className={styles.spentAmount}>{formatFromJPY(cat.spent)}</div>
-
-            <div style={{ fontSize: 12, color: "#666", textAlign: "left" }}>
-              <div
-                style={{
-                  fontSize: 11,
-                  textAlign: "center",
-                  color: "#999",
-                }}
-              >
-                Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "No limit"}
-              </div>
+            <div className={styles.spentAmount}>
+              {/* show only this month's sum for the category */}
+              {formatFromJPY(monthlySpentByCategory.get(cat.id) || 0)}
+            </div>
+            <div style={{ fontSize: 11, textAlign: "center", color: "#999" }}>
+              Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "No limit"}
             </div>
           </div>
         ))}
 
-        {/* Center circular + button (opens new-category modal) */}
+        {/* Add new category button */}
         <div className={styles.newCategoryButtonContainer}>
           <button
             onClick={() => {
@@ -377,7 +283,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Category popup (small modal) */}
+      {/* Category popup */}
       {popupFor && current && (
         <div
           role="dialog"
@@ -424,9 +330,11 @@ export default function HomePage() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: 12, color: "#666" }}>Amount</div>
+                  <div style={{ fontSize: 12, color: "#666" }}>
+                    Amount (This month)
+                  </div>
                   <div style={{ fontSize: 18, fontWeight: 700 }}>
-                    {formatFromJPY(current.spent)}
+                    {formatFromJPY(monthlySpentByCategory.get(current.id) || 0)}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -499,20 +407,12 @@ export default function HomePage() {
                                   <button
                                     onClick={() => {
                                       setCategories((prev) =>
-                                        prev!.map((c) => {
+                                        (prev || []).map((c) => {
                                           if (c.id !== current.id) return c;
                                           const nextHistory = (
                                             c.history || []
                                           ).filter((x) => x.id !== h.id);
-                                          const spent = nextHistory.reduce(
-                                            (s, x) => s + x.amount,
-                                            0
-                                          );
-                                          return {
-                                            ...c,
-                                            history: nextHistory,
-                                            spent,
-                                          };
+                                          return { ...c, history: nextHistory };
                                         })
                                       );
                                     }}
@@ -573,7 +473,7 @@ export default function HomePage() {
               <button
                 onClick={() => {
                   if (!newCatName.trim())
-                    return console.error("名前を入力してください"); // 🚨 alert() をコンソールログに置き換え
+                    return console.error("名前を入力してください");
                   addCategoryConfirmed(newCatName);
                   setNewCatModalOpen(false);
                 }}
