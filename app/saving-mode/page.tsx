@@ -119,7 +119,7 @@ export default function SavingModePage() {
         <div>読み込み中…</div>
       ) : (
         <>
-          <h2>Saving Mode — Limit Management (This month)</h2>
+          <h2>Saving Mode — Limit Management</h2>
           <p style={{ margin: "10px 0" }}>
             Here you can set and edit the limit for each category.
           </p>
