@@ -261,10 +261,11 @@ export default function HomePage() {
             <div className={styles.spentAmount}>
               {/* show only this month's sum for the category */}
               {formatFromJPY(monthlySpentByCategory.get(cat.id) || 0)}
+              <div style={{ fontSize: 9, textAlign: "center", color: "#999" }}>
+              Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "-"}
             </div>
-            <div style={{ fontSize: 11, textAlign: "center", color: "#999" }}>
-              Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "No limit"}
             </div>
+            
           </div>
         ))}
 

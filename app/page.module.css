@@ -49,8 +49,7 @@
 
 .categoryItem {
   width: 100%;
-  /* max-width: 160px; */
-  height: 80px;
+  height: 70px;
   background: #fff;
   border-radius: 8px;
   padding: 12px;
