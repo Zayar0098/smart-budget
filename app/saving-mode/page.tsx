@@ -184,13 +184,12 @@ export default function SavingModePage() {
                               onChange={(e) =>
                                 updateEditValue(c.id, e.target.value)
                               }
-                              style={{ width: 100 }}
+                              style={{ width: 125 }}
                             />
                             <button onClick={() => saveLimit(c.id)}>Save</button>
                             <button onClick={() => setEditingId(null)}>
                               Cancel
                             </button>
-                            <button onClick={() => resetLimit(c.id)}>Reset</button>
                           </>
                         ) : (
                           <>
