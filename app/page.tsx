@@ -261,7 +261,7 @@ export default function HomePage() {
             <div className={styles.spentAmount}>
               {/* show only this month's sum for the category */}
               {formatFromJPY(monthlySpentByCategory.get(cat.id) || 0)}
-              <div style={{ fontSize: 9, textAlign: "center", color: "#999" }}>
+              <div style={{ fontSize: 9, textAlign: "center", color: "#000000ff" }}>
               Limit : {cat.limit > 0 ? formatFromJPY(cat.limit) : "-"}
             </div>
             </div>
@@ -343,7 +343,7 @@ export default function HomePage() {
                     onClick={() => openNumberPadForAdd(current.id)}
                     style={{
                       padding: "8px 12px",
-                      background: "#4f46e5",
+                      background: "var(--color-button)",
                       color: "#fff",
                       border: "none",
                       borderRadius: 6,
@@ -480,7 +480,7 @@ export default function HomePage() {
                 }}
                 style={{
                   padding: "8px 12px",
-                  background: "#4f46e5",
+                  background: "var(--color-button)",
                   color: "#fff",
                   border: "none",
                   borderRadius: 6,

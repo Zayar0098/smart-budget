@@ -67,7 +67,7 @@ useEffect(() => {
 >
   ＋
 </button>
-    <main style={{ padding: 16, maxWidth: 1000, margin: "0 auto",background:"#f0f0f0"}}>
+    <main style={{ padding: 16, maxWidth: 1000, margin: "0 auto",}}>
       <section>
         <div>
           <h2>Part Time</h2>

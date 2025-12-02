@@ -7,7 +7,7 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: flex-end; 
+  align-items: flex-end;
   justify-content: center;
   background: rgba(0, 0, 0, 0.35);
   z-index: 9999;
@@ -22,7 +22,7 @@
   border-top-right-radius: 16px;
   overflow: hidden;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
-  margin: 0; 
+  margin: 0;
 }
 
 /* ---------------------------------------------------- */
@@ -37,7 +37,7 @@
 }
 .displayLabel {
   font-size: 13px; /* Slightly smaller font */
-  color: #555;
+  color: #063046;
 }
 .displayValue {
   font-size: 22px; /* Reduced font size for display value */
@@ -62,8 +62,8 @@
   padding: 16px 14px; /* Reduced vertical padding for smaller button height */
   font-size: 20px; /* Reduced font size */
   font-weight: 500;
-  border: 1px solid #eee;
-  background-color: #f7f7f7;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: #fafafa;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.1s;
@@ -89,14 +89,14 @@
 
 .cancelButton {
   composes: actionButton;
-  background: #fff;
-  color: #333;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.95);
+  color: #063046;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .confirmButton {
   composes: actionButton;
-  background: #4f46e5;
+  background: var(--color-button);
   color: #fff;
   border: none;
 }

@@ -155,7 +155,7 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
 
   return (
     <CurrencyContext.Provider value={value}>
-      <div style={{ background:"#fff", borderBottom: "1px solid #eee" }}>
+      <div style={{ background:"var(--color-header);",}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 12 }}>
           <div style={{ fontWeight: 700 }}>Smart Budget</div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
