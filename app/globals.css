@@ -11,7 +11,6 @@ body {
   --color-button: #1d5b8a;
   --color-category: #5c99c5;
   --color-main-bg: #afcbe3;
-
   background: var(--color-main-bg);
 }
 

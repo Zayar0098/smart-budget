@@ -4,7 +4,7 @@ import JobForm from "../../components/JobForm";
 import JobCard from "../../components/JobCard";
 import JobModal from "../../components/JobModal";
 import {
-  loadJobs,
+  loadJobs,saveJobs,
   recalcAllTotals,
   deleteJob,
   Job as JobType,
@@ -43,9 +43,11 @@ useEffect(() => {
   setJobs(loadJobs());
 }, []);
   
-  function handleDeleteSession(jobId: string, sessionId: string) {
-  setJobs(prev =>
-    prev.map(job => {
+ // IncomePage.tsx
+
+function handleDeleteSession(jobId: string, sessionId: string) {
+  setJobs(prev => {
+    const updated = prev.map(job => {
       if (job.id !== jobId) return job;
 
       const updatedHistory = job.history.filter(h => h.id !== sessionId);
@@ -55,11 +57,17 @@ useEffect(() => {
         history: updatedHistory,
         total: updatedHistory.reduce((sum, h) => sum + h.total, 0),
       };
-    })
-  );
+    });
+
+    // 1. Remove the line that uses the wrong key:
+    // localStorage.setItem("sb_jobs", JSON.stringify(updated));
+
+    // 2. ★ Crucial Change: Use the correct utility function
+    saveJobs(updated); // This will save to "pt_jobs_v2"
+
+    return updated;
+  });
 }
-
-
   return (<>
     <button
   className={styles.addButton}

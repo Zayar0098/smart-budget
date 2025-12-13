@@ -20,10 +20,10 @@ export default function HomePage() {
   const [categories, setCategories] = useClientStoredState<Category[]>(
     "sb_categories",
     [
-      { id: "rent-house", name: "Rent-house", limit: 0, history: [] },
-      { id: "gas-bill", name: "Gas", limit: 0, history: [] },
-      { id: "electric", name: "Electric", limit: 0, history: [] },
-      { id: "water", name: "Water", limit: 0, history: [] },
+      { id: "家賃", name: "家賃🏠", limit: 0, history: [] },
+      { id: "ガス代", name: "ガス代🔥", limit: 0, history: [] },
+      { id: "電気代", name: "電気代⚡", limit: 0, history: [] },
+      { id: "水道代", name: "水道代🚰", limit: 0, history: [] },
     ]
   );
 
@@ -124,11 +124,6 @@ export default function HomePage() {
     ]);
   };
 
-  const deleteCategory = (catId: string) => {
-    setCategories((prev) => (prev || []).filter((c) => c.id !== catId));
-    closeCategoryPopup();
-  };
-
   const openCategoryPopup = (catId: string) => setPopupFor(catId);
   const closeCategoryPopup = () => {
     setPopupFor(null);
@@ -196,6 +191,24 @@ export default function HomePage() {
       historyByDate[d].push(h);
     });
   }
+  const editCategoryName = (catId: string, currentName: string) => {
+  const newName = prompt("カテゴリ名を編集してください", currentName);
+  if (!newName || !newName.trim()) return;
+
+  setCategories((prev) =>
+    (prev || []).map((c) =>
+      c.id === catId ? { ...c, name: newName.trim() } : c
+    )
+  );
+};
+
+  const handleDeleteCategory = (catId: string, catName: string) => {
+  const ok = confirm(`Do you want ot delete ${catName} `);
+  if (!ok) return;
+
+  setCategories((prev) => (prev || []).filter((c) => c.id !== catId));
+  closeCategoryPopup();
+};
 
   return (
     <div className={styles.container}>
@@ -306,19 +319,24 @@ export default function HomePage() {
               }}
             >
               <div style={{ fontWeight: 700 }}>{current.name}</div>
+              <div>
+                <button onClick={() => editCategoryName(current.id, current.name)}
+                  style={{background: "#1d5b8a",color: "#fff",marginRight:"5px",}}>Edit
+                </button>
               <button
                 aria-label={`Delete ${current.name}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  deleteCategory(current.id);
+                   handleDeleteCategory(current.id, current.name);
                 }}
                 style={{
-                  color: "#fff",
-                  backgroundColor: "#ff3d3dff",
+                  color: "red",
+                  backgroundColor: "#fce8e8",
                 }}
               >
                 Delete
-              </button>
+                </button>
+                </div>
             </div>
 
             <div style={{ padding: 12 }}>

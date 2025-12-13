@@ -11,6 +11,16 @@
   margin-bottom: 12px;
 }
 
+.totalBox {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 .arrowBtn {
   border: none;
   background: #eee;
@@ -82,8 +92,8 @@
 }
 
 .historyContainer {
-  margin-top: 24px;
-  padding-top: 16px;
+  margin-top: 10px;
+  padding-top: 14px;
   border-top: 1px solid #eee;
 }
 
@@ -120,7 +130,7 @@
 
 .historyCategory{
   font-size: 12px;
-  width: 65px;
+  width: 60px;
 }
 
 .historyAmount {
@@ -128,9 +138,16 @@
   font-size: 14px;
 }
 
+.historyDateGroup{
+  background-color: var(--color-category);
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+}
+
 .historyDateTitle{
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .historyDate {

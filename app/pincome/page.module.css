@@ -92,28 +92,29 @@
 
 .monthSection {
   margin-bottom: 32px;
+  background-color: var(--color-category);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .monthHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  margin-bottom: 10px 
 }
 
-.monthTitle {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.monthTotal {
-  font-size: 18px;
+.monthTitle,.monthTotal {
+  font-size: 16px;
   font-weight: 700;
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .cardList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr ;
   gap: 12px;
 }
 
@@ -122,6 +123,7 @@
   border-radius: 10px;
   padding: 12px;
   border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cardHeader {
@@ -145,7 +147,7 @@
   font-size: 12px;
 }
 
-.jobcard .deletebtn {
+.jobcard .deletebtn,.deleteButton {
   padding: 8px;
   background-color: #fce8e8;
   color: #cc0000;

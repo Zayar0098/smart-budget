@@ -74,6 +74,8 @@ export default function CalendarPage() {
   // Month navigation
   const prevMonth = () => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
   const nextMonth = () => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+  const monthlyTotalJPY = Object.values(dailyTotals).reduce((sum, v) => sum + v, 0);
+const monthlyTotal = convertFromJPY(monthlyTotalJPY);
 
   // Prepare month history
   const monthHistory: MonthHistoryItem[] = [];
@@ -129,6 +131,9 @@ export default function CalendarPage() {
             </div>
           );
         })}
+      </div>
+      <div className={styles.totalBox}>
+        Total : {Math.round(monthlyTotal).toLocaleString()} {selected}
       </div>
 
       {/* History Section */}

@@ -113,6 +113,27 @@ export default function SavingModePage() {
     setEditingId(null);
   };
 
+  const getUsageColor = (percent: number) => {
+  if (percent >= 90) return "#dc2626"; 
+  if (percent >= 60) return "#f59e0b"; 
+  return "#4f46e5"; 
+  }
+  const sortedNormalized = [...normalized].sort((a, b) => {
+  const percentA =
+    a.limit && a.limit > 0
+      ? Math.min(100, Math.round((a.spentThisMonth / a.limit) * 100))
+      : 0;
+
+  const percentB =
+    b.limit && b.limit > 0
+      ? Math.min(100, Math.round((b.spentThisMonth / b.limit) * 100))
+      : 0;
+
+  // 危険 → 安全（高い順）
+  return percentB - percentA;
+});
+
+
   return (
     <div className={styles.container}>
       {loading ? (
@@ -129,7 +150,7 @@ export default function SavingModePage() {
           ) : (
             <>
               <div style={{ display: "grid", gap: 12 }}>
-                {normalized.map((c) => {
+                {sortedNormalized.map((c) => {
                   const spent = Number(c.spentThisMonth || 0);
                   const lim = Number(c.limit || 0);
                   const percent =
@@ -147,7 +168,7 @@ export default function SavingModePage() {
                         >
                           <strong>{c.name}</strong>
                           <div style={{ fontSize: 13, color: "#666" }}>
-                            {formatYen(spent)} spent
+                            {formatYen(spent)} / {lim > 0 ? formatYen(lim) : "Not set"} 
                           </div>
                         </div>
 
@@ -164,13 +185,12 @@ export default function SavingModePage() {
                               style={{
                                 width: `${percent}%`,
                                 height: "100%",
-                                background: percent >= 100 ? "#dc2626" : "#4f46e5",
+                                background: getUsageColor(percent)
                               }}
                             />
                           </div>
                           <div style={{ marginTop: 6, fontSize: 13 }}>
-                            Limit : {lim > 0 ? formatYen(lim) : "Not set"} ・ Usage
-                            : {percent}%
+                            Usage : {percent}%
                           </div>
                         </div>
                       </div>

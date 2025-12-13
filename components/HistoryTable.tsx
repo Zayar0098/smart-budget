@@ -3,6 +3,8 @@
 import { Job, HistoryEntry } from "../lib/partTime";
 import styles from "../app/pincome/page.module.css";
 import { useCurrency } from "../components/CurrencyProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 type Row = HistoryEntry & { jobId: string; jobName: string };
 
@@ -49,7 +51,7 @@ export default function HistoryTable({ jobs, onDelete }: Props) {
             <div className={styles.monthHeader}>
               <div className={styles.monthTitle}>{month}</div>
               <div className={styles.monthTotal}>
-                {formatFromJPY(monthlyTotals[month])}
+                 Total : {formatFromJPY(monthlyTotals[month])}
               </div>
             </div>
 
@@ -65,9 +67,9 @@ export default function HistoryTable({ jobs, onDelete }: Props) {
 
                   <div className={styles.cardBody}>
                     <div>
-                    <strong>Date:</strong> {r.date}<br />
-                      <strong>Time:</strong> {r.startTime} → {r.endTime}<br />
-                      <strong>Break:</strong>{" "}
+                    {r.date}<br />
+                      {r.startTime} → {r.endTime} <br />
+                      Break:{" "}
                       {r.restStart ? `${r.restStart} → ${r.restEnd}` : "-"}
                     </div>
                     <div>
@@ -75,12 +77,11 @@ export default function HistoryTable({ jobs, onDelete }: Props) {
                     className={styles.deleteButton}
                     onClick={() => onDelete?.(r.jobId, r.id)}
                   >
-                    Delete
+            <FontAwesomeIcon icon={faTrash}/>
+                    
                   </button>
                     </div>
                   </div>
-
-                  {/* DELETE BUTTON */}
                 </div>
               ))}
             </div>
