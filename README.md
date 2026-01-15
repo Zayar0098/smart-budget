@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Budget（スマート・バジェット）
 
-## Getting Started
+Smart Budget は、**日本で生活する留学生やアルバイトをしている学生向け**に開発した、シンプルで使いやすい家計管理Webアプリケーションです。収入・支出・貯金状況を月ごとに分かりやすく管理できることを目的としています。
 
-First, run the development server:
+## 特徴
+
+* 💰 **収入・支出の管理**：日々の収入や支出をカテゴリー別に記録
+* 🛒 **カテゴリー管理**：家賃・ガス代などの基本生活カテゴリーをあらかじめ用意し、追加も可能
+* 🧮 **自動合計計算**：月ごとの合計金額・残高を自動計算
+* ➕ **数量指定入力**：カートのような感覚で金額を簡単に入力
+* 📊 **月次確認**：当月の収支状況を一目で確認
+* 💾 **ローカル保存**：`localStorage` を使用し、ログイン不要・オフライン対応
+* 🌐 **留学生向け設計**：日本語に不慣れなユーザーでも使いやすいUIを意識
+
+## 使用技術
+
+* **フレームワーク**：Next.js（App Router）
+* **言語**：TypeScript
+* **スタイリング**：CSS Modules
+* **状態管理**：React Hooks
+* **データ保存**：Browser `localStorage`
+
+## ページ構成
+
+* `/` ：ホーム（ダッシュボード）
+* `/pincome` ：バイト収入管理
+* `/month` ：月別収支確認
+* `/saving-mode` ：予算・節約
+* `/settings` ：設定画面
+
+## 起動方法
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで `http://localhost:3000` を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## データ管理について
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* 金銭データはすべてブラウザ内に保存されます
+* 月が変わると自動で初期化される仕組みを実装しています
+* 外部サーバーへの送信は行いません
 
-## Learn More
+## 想定ユーザー
 
-To learn more about Next.js, take a look at the following resources:
+* 日本で生活する外国人留学生
+* アルバイトをしている学生
+* シンプルでプライバシー重視の家計管理をしたい人
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 開発状況
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🚧 **現在も開発途中**のアプリケーションです。UI改善や機能追加を継続しています。
 
-## Deploy on Vercel
+## 今後の改善予定
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* 📈 グラフ表示による可視化
+* ☁️ データのエクスポート・バックアップ機能
+* 🌍 多言語対応
+* 📱 モバイルUIの最適化
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ご意見・改善案があればぜひ教えてください。
